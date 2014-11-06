@@ -12,11 +12,13 @@ if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
 }
 
-class Skroutz_Xml_Feed extends Module {
+include_once dirname(__FILE__) . '/classes/helper/HelperSkroutzLoader.php';
+
+class SkroutzXmlFeed extends Module {
 	/**
 	 * @var string Name of this plugin
 	 */
-	public $name = 'Skroutz XML Feed';
+	public $name = 'skroutzxmlfeed';
 	/**
 	 * @var string Description
 	 */
@@ -40,36 +42,43 @@ class Skroutz_Xml_Feed extends Module {
 	/**
 	 * @var array
 	 */
-	public $ps_versions_compliancy = array( 'min' => '1.5', 'max' => '1.6' );
+	public $ps_versions_compliancy = array( 'min' => '1.5' );
 	/**
 	 * @var array
 	 */
 	public $dependencies = array();
+	/**
+	 * @var string
+	 */
+	public $displayName = 'Skroutz XML Feed';
+
+	/**
+	 * @var HelperSkroutzLoader
+	 */
+	protected $loader;
 
 	/**
 	 *
 	 */
 	public function __construct() {
-		$this->name = 'Skroutz XML Feed';
-		$this->tab = 'Generates XML feed for skroutz.gr';
-		$this->version = '0.1';
-		$this->author = 'Panagiotis Vagenas';
-		$this->need_instance = 0;
-		$this->ps_versions_compliancy = array('min' => '1.5');
-		$this->dependencies = array();
-
 		parent::__construct();
 
-		$this->displayName = $this->l( $this->name );
+		$this->displayName = $this->l( $this->displayName );
 		$this->description = $this->l( $this->description );
 
 		$this->confirmUninstall = $this->l( 'Are you sure you want to uninstall?' );
 
-		if ( ! Configuration::get( 'MYMODULE_NAME' ) ) {
-			$this->warning = $this->l( 'No name provided' );
-		}
+		$this->loader = new HelperSkroutzLoader();
 	}
 
+	/**
+	 * Module options page
+	 *
+	 * @return string
+	 *
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since ${VERSION}
+	 */
 	public function getContent() {
 		$output = null;
 
@@ -154,7 +163,9 @@ class Skroutz_Xml_Feed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function install() {
-		return (parent::install()) && Configuration::updateValue('MYMODULE_NAME', 'my friend');
+		if (parent::install() == false)
+			return false;
+		return true;
 	}
 
 	/**
@@ -164,8 +175,9 @@ class Skroutz_Xml_Feed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function uninstall() {
-		if (!parent::uninstall())
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'mymodule`');
-		parent::uninstall();
+		if (!parent::uninstall() ||
+		    !Configuration::deleteByName('MYMODULE_NAME'))
+			return false;
+		return true;
 	}
 }
