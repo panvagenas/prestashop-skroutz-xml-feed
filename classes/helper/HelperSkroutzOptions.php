@@ -29,50 +29,6 @@ final class HelperSkroutzOptions{
 	);
 
 	/**
-	 * @param $key
-	 * @param bool $default
-	 *
-	 * @return mixed
-	 * @throws Exception
-	 *
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since ${VERSION}
-	 */
-	public function getValue( $optionName, $default = false ) {
-		if ( ! isset( $this->defaults[ $optionName ] ) ) {
-			throw new Exception( 'No matching option' );
-		}
-		if ( $default ) {
-			return $this->defaults[ $optionName ];
-		}
-
-		return isset( $this->stored[ $optionName ] ) ? $this->stored[ $optionName ] : $this->defaults[ $optionName ];
-	}
-
-	/**
-	 * @return bool
-	 *
-	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since ${VERSION}
-	 */
-	public function saveOptions( Array $newOptions ) {
-		$this->stored = $this->validateOptions( $newOptions );
-
-		return Configuration::updateValue( $this->optionsArrayName, serialize( $this->stored ) );
-	}
-
-	/**
-	 *
-	 */
-	private function __construct() {
-		$this->init();
-	}
-
-	public function getOptionsArray($defaults = false){
-		return $defaults ? $this->defaults : $this->stored;
-	}
-
-	/**
 	 * @return $this
 	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
@@ -86,7 +42,7 @@ final class HelperSkroutzOptions{
 			// Internal, indicates XML generation progress
 			'xml.progress'        => 0,
 			// File location
-			'xml_location'        => '/',
+			'xml_location'        => '',
 			// File name
 			'xml_fileName'        => 'skroutz.xml',
 			// Generation interval
@@ -108,15 +64,13 @@ final class HelperSkroutzOptions{
 			'map_name_append_sku' => 1,
 			'map_link'            => 0,
 			'map_image'           => 0,
-			'map_category'        => 'product',
+			'map_category'        => 0,
 			'map_price_with_vat'  => 0,
 			'map_manufacturer'    => 0,
 			'map_mpn'             => 0,
 			'map_isbn'            => 0,
 			'map_size'            => array(),
-			'map_size_use'        => 1,
 			'map_color'           => array(),
-			'map_color_use'       => 0,
 			/***********************************************
 			 * Fashion store
 			 ***********************************************/
@@ -124,7 +78,7 @@ final class HelperSkroutzOptions{
 			'is_book_store'       => 0
 		);
 
-		$this->stored = unserialize( (array) Configuration::get( $this->optionsArrayName ) );
+		$this->stored = unserialize( Configuration::get( $this->optionsArrayName ) );
 
 		if(!$this->stored || empty($this->stored)){
 			$this->stored = $this->defaults;
@@ -132,6 +86,51 @@ final class HelperSkroutzOptions{
 		}
 
 		return $this;
+	}
+
+	/**
+	 * @param $key
+	 * @param bool $default
+	 *
+	 * @return mixed
+	 * @throws Exception
+	 *
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since ${VERSION}
+	 */
+	public function getValue( $optionName, $default = false ) {
+		if ( ! isset( $this->defaults[ $optionName ] ) ) {
+			throw new Exception( 'No matching option' );
+		}
+		if ( $default ) {
+			return $this->defaults[ $optionName ];
+		}
+
+		return isset( $this->stored[ $optionName ] ) ? $this->stored[ $optionName ] : $this->defaults[ $optionName ];
+	}
+
+	/**
+	 * @param $newOptions
+	 *
+	 * @return bool
+	 *
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since ${VERSION}
+	 */
+	public function saveOptions( $newOptions ) {
+		$this->stored = $this->validateOptions( $newOptions );
+		return Configuration::updateValue( $this->optionsArrayName, serialize( $this->stored ) );
+	}
+
+	/**
+	 *
+	 */
+	private function __construct() {
+		$this->init();
+	}
+
+	public function getOptionsArray($defaults = false){
+		return $defaults ? $this->defaults : $this->stored;
 	}
 
 	/**
@@ -143,19 +142,25 @@ final class HelperSkroutzOptions{
 	 * @since ${VERSION}
 	 */
 	public function validateOptions( Array $newOptions ) {
+		foreach ( $newOptions as $k => $v ) {
+			if(!array_key_exists($k, $this->defaults)){
+				unset($newOptions[$k]);
+			}
+		}
+
 		$newOptions['xml_location'] = isset( $newOptions['xml_location'] )
 		                              && is_string( $newOptions['xml_location'] )
-		                              && ( is_writable($newOptions['xml_location']) || ! is_dir( $newOptions['xml_location'] ) )
-			? $newOptions['xml_location'] : $this->defaults['xml_location'];
+		                              && ( is_writable(_PS_ROOT_DIR_ . '/' . $newOptions['xml_location']) || ! is_dir( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) )
+			? pSQL(ltrim($newOptions['xml_location'], '/\\')) : $this->defaults['xml_location'];
 
 		$newOptions['xml_fileName'] = isset( $newOptions['xml_fileName'] )
 		                              && is_string( $newOptions['xml_fileName'] )
 		                              && Validate::isFileName( $newOptions['xml_fileName'] )
-			? $newOptions['xml_fileName'] : $this->defaults['xml_fileName'];
+			? pSQL($newOptions['xml_fileName']) : $this->defaults['xml_fileName'];
 
 		$newOptions['xml_interval'] = isset( $newOptions['xml_interval'] )
 		                              && is_string( $newOptions['xml_interval'] )
-			? $newOptions['xml_interval'] : $this->defaults['xml_interval'];
+			? pSQL($newOptions['xml_interval']) : $this->defaults['xml_interval'];
 
 		$newOptions['avail_inStock'] = isset( $newOptions['avail_inStock'] )
 		                               && is_numeric( $newOptions['avail_inStock'] )
@@ -207,25 +212,22 @@ final class HelperSkroutzOptions{
 
 		$newOptions['map_size'] = isset( $newOptions['map_size'] )
 		                          && is_array( $newOptions['map_size'] )
-			? (int) $newOptions['map_size'] : (int) $this->defaults['map_size'];
+			? $newOptions['map_size'] : $this->defaults['map_size'];
 
 		$newOptions['map_color'] = isset( $newOptions['map_color'] )
 		                           && is_array( $newOptions['map_color'] )
-			? (int) $newOptions['map_color'] : (int) $this->defaults['map_color'];
-
-		$newOptions['map_size_use'] = isset( $newOptions['map_size_use'] )
-			? (int) $newOptions['map_size_use'] : (int) $this->defaults['map_size_use'];
-
-		$newOptions['map_color_use'] = isset( $newOptions['map_color_use'] )
-			? (int) $newOptions['map_color_use'] : (int) $this->defaults['map_color_use'];
+			? $newOptions['map_color'] : $this->defaults['map_color'];
 
 		$newOptions['is_fashion_store'] = isset( $newOptions['is_fashion_store'] )
 			? (int) $newOptions['is_fashion_store'] : (int) $this->defaults['is_fashion_store'];
 
 		$newOptions['is_book_store'] = isset( $newOptions['is_book_store'] )
 			? (int) $newOptions['is_book_store'] : (int) $this->defaults['is_book_store'];
-
 		return $newOptions;
+	}
+
+	public function deleteAllOptions(){
+		return Configuration::deleteByName($this->optionsArrayName);
 	}
 
 	/**

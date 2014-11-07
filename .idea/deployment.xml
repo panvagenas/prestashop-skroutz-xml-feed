@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="development.local.dev">
+  <component name="PublishConfigData" serverName="development.local.dev/skroutz-presta">
     <serverData>
-      <paths name="development.local.dev">
+      <paths name="development.local.dev/skroutz-presta">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/ecoprint" />
+            <mapping local="$PROJECT_DIR$/../.." web="/skroutz-presta" />
           </mappings>
         </serverdata>
       </paths>
