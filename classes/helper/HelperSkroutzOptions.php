@@ -11,7 +11,7 @@ if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
 }
 
-final class HelperSkroutzOptions{
+final class HelperSkroutzOptions {
 	public $defaults = array();
 	protected $stored = array();
 	protected $optionsArrayName = 'SkroutzXMLFeedOptions';
@@ -53,9 +53,11 @@ final class HelperSkroutzOptions{
 			// Availability when products in stock
 			'avail_inStock'       => 1,
 			// Availability when products out stock
-			'avail_outOfStock'    => 3,
+			'avail_outOfStock'    => 0,
 			// Availability when products out stock and backorders are allowed
-			'avail_backorders'    => count( $this->availOptions ),
+			'avail_backorders'    => 5,
+			// Include disabled products
+			'include_disabled'    => 0,
 			/*********************
 			 * Custom fields
 			 ********************/
@@ -80,10 +82,12 @@ final class HelperSkroutzOptions{
 
 		$this->stored = unserialize( Configuration::get( $this->optionsArrayName ) );
 
-		if(!$this->stored || empty($this->stored)){
+		if ( ! $this->stored || empty( $this->stored ) ) {
 			$this->stored = $this->defaults;
-			$this->saveOptions($this->stored);
+			$this->saveOptions( $this->stored );
 		}
+
+		$this->stored = array_merge($this->defaults, $this->stored);
 
 		return $this;
 	}
@@ -119,6 +123,7 @@ final class HelperSkroutzOptions{
 	 */
 	public function saveOptions( $newOptions ) {
 		$this->stored = $this->validateOptions( $newOptions );
+
 		return Configuration::updateValue( $this->optionsArrayName, serialize( $this->stored ) );
 	}
 
@@ -129,7 +134,7 @@ final class HelperSkroutzOptions{
 		$this->init();
 	}
 
-	public function getOptionsArray($defaults = false){
+	public function getOptionsArray( $defaults = false ) {
 		return $defaults ? $this->defaults : $this->stored;
 	}
 
@@ -143,24 +148,24 @@ final class HelperSkroutzOptions{
 	 */
 	public function validateOptions( Array $newOptions ) {
 		foreach ( $newOptions as $k => $v ) {
-			if(!array_key_exists($k, $this->defaults)){
-				unset($newOptions[$k]);
+			if ( ! array_key_exists( $k, $this->defaults ) ) {
+				unset( $newOptions[ $k ] );
 			}
 		}
 
 		$newOptions['xml_location'] = isset( $newOptions['xml_location'] )
 		                              && is_string( $newOptions['xml_location'] )
-		                              && ( is_writable(_PS_ROOT_DIR_ . '/' . $newOptions['xml_location']) || ! is_dir( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) )
-			? pSQL(ltrim($newOptions['xml_location'], '/\\')) : $this->defaults['xml_location'];
+		                              && ( is_writable( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) || ! is_dir( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) )
+			? pSQL( ltrim( $newOptions['xml_location'], '/\\' ) ) : $this->defaults['xml_location'];
 
 		$newOptions['xml_fileName'] = isset( $newOptions['xml_fileName'] )
 		                              && is_string( $newOptions['xml_fileName'] )
 		                              && Validate::isFileName( $newOptions['xml_fileName'] )
-			? pSQL($newOptions['xml_fileName']) : $this->defaults['xml_fileName'];
+			? pSQL( $newOptions['xml_fileName'] ) : $this->defaults['xml_fileName'];
 
 		$newOptions['xml_interval'] = isset( $newOptions['xml_interval'] )
 		                              && is_string( $newOptions['xml_interval'] )
-			? pSQL($newOptions['xml_interval']) : $this->defaults['xml_interval'];
+			? pSQL( $newOptions['xml_interval'] ) : $this->defaults['xml_interval'];
 
 		$newOptions['avail_inStock'] = isset( $newOptions['avail_inStock'] )
 		                               && is_numeric( $newOptions['avail_inStock'] )
@@ -223,11 +228,12 @@ final class HelperSkroutzOptions{
 
 		$newOptions['is_book_store'] = isset( $newOptions['is_book_store'] )
 			? (int) $newOptions['is_book_store'] : (int) $this->defaults['is_book_store'];
+
 		return $newOptions;
 	}
 
-	public function deleteAllOptions(){
-		return Configuration::deleteByName($this->optionsArrayName);
+	public function deleteAllOptions() {
+		return Configuration::deleteByName( $this->optionsArrayName );
 	}
 
 	/**

@@ -127,6 +127,27 @@ class HelperSkroutzForm extends HelperFormCore {
 				),
 				array(
 					'type'     => 'switch',
+					'label'    => $this->l( 'Include disabled products' ),
+					'hint'     => $this->l( 'Set to yes if you want to include disabled products in XML file.' ),
+					'name'     => 'include_disabled',
+					'required' => true,
+					'class'    => 't',
+					'is_bool'  => true,
+					'values'   => array(                                 // $values contains the data itself.
+						array(
+							'id'    => 'include_disabled',
+							'value' => 1,
+							'label' => $this->l( 'Yes' )
+						),
+						array(
+							'id'    => 'do_not_include_disabled',
+							'value' => 0,
+							'label' => $this->l( 'No' )
+						)
+					),
+				),
+				array(
+					'type'     => 'switch',
 					'label'    => $this->l( 'Fashion store' ),
 					'hint'     => $this->l( 'Your store contains fashion items, eg shoes, clothes etc.' ),
 					'name'     => 'is_fashion_store',
