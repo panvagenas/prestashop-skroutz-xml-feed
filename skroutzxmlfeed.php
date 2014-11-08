@@ -12,7 +12,7 @@ if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
 }
 
-include_once dirname(__FILE__) . '/classes/helper/HelperSkroutzLoader.php';
+include_once dirname( __FILE__ ) . '/classes/helper/HelperSkroutzLoader.php';
 
 class SkroutzXmlFeed extends Module {
 	/**
@@ -81,29 +81,36 @@ class SkroutzXmlFeed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function getContent() {
+		$this->loader->loadHelper( 'Skroutz' );
+		$skz = new HelperSkroutz();
+		d( $skz->debug() );
 		$output = null;
 
 		if ( Tools::isSubmit( 'submit' . $this->name ) ) {
 			$newOptions = $_POST;
 
-			$this->loader->loadHelper('SkroutzOptions');
+			$this->loader->loadHelper( 'SkroutzOptions' );
 			$skzOpts = HelperSkroutzOptions::Instance();
-			if($skzOpts->saveOptions($newOptions)) {
+			if ( $skzOpts->saveOptions( $newOptions ) ) {
 				$output .= $this->displayConfirmation( $this->l( 'Settings updated' ) );
 			} else {
-				$output .= $this->displayError($this->l('There was an error saving options'));
+				$output .= $this->displayError( $this->l( 'There was an error saving options' ) );
 			}
 		}
 
 		return $output . $this->displayForm();
 	}
 
-	public function displayForm()
-	{
-		$this->loader->loadHelper('SkroutzForm');
+	public function displayForm() {
+		$this->loader->loadHelper( 'SkroutzForm' );
 		$form = new HelperSkroutzForm();
 
-		return $form->init($this)->generateForm();
+		return $form->init( $this )->generateForm();
+	}
+
+	public function hookDisplayHeader( $p ) {
+		p( 'hook' );
+		d( $p );
 	}
 
 	/**
@@ -113,13 +120,15 @@ class SkroutzXmlFeed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function install() {
-		if(!$this->loader->loadHelper('SkroutzOptions')){
+		if ( ! $this->loader->loadHelper( 'SkroutzOptions' ) ) {
 			return false;
 		}
 		HelperSkroutzOptions::Instance();
-		if (parent::install() == false)
+		if ( parent::install() == false ) {
 			return false;
-		return true;
+		}
+
+		return $this->registerHook( 'DisplayHeader' );
 	}
 
 	/**
@@ -129,12 +138,16 @@ class SkroutzXmlFeed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function uninstall() {
-		if(!$this->loader->loadHelper('SkroutzOptions')){
+		if ( ! $this->loader->loadHelper( 'SkroutzOptions' ) ) {
 			return false;
 		}
-		if (!parent::uninstall() ||
-		    !HelperSkroutzOptions::Instance()->deleteAllOptions())
+		if ( ! parent::uninstall()
+		     || ! HelperSkroutzOptions::Instance()->deleteAllOptions()
+		     || ! $this->unregisterHook( 'DisplayHeader' )
+		) {
 			return false;
+		}
+
 		return true;
 	}
 }

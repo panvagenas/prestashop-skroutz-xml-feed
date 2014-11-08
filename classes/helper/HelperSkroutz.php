@@ -39,12 +39,12 @@ class HelperSkroutz extends Helper {
 		$outOfStockInclude = $this->options->getValue( 'avail_outOfStock' );
 
 		foreach ( (array) $products as $key => $product ) {
-			$p = new Product( $product['id_product'] );
-			$backOrdersAllowed = StockAvailable::getQuantityAvailableByProduct($product->id) < 0;
+			$p                 = new Product( $product['id_product'] );
+			$backOrdersAllowed = StockAvailable::getQuantityAvailableByProduct( $product->id ) < 0;
 			// TODO Check for product avail etc
 
 			$hasStock = $p->checkQty( 1 );
-			if ( ( (! $backOrdersInclude || ! $outOfStockInclude ) && ! $hasStock )
+			if ( ( ( ! $backOrdersInclude || ! $outOfStockInclude ) && ! $hasStock )
 			     || $p->getType() != 0
 			     || $p->visibility == 'none'
 			     || $p->available_for_order == 0
@@ -80,20 +80,14 @@ class HelperSkroutz extends Helper {
 		$out['availability']   = $this->getAvailabilityString( $product );
 		$out['manufacturer']   = $this->getProductManufacturer( $product );
 
-		if ( $product->getType() == 2 && (bool) $this->©option->get( 'is_fashion_store' ) ) {
-			$variableProduct = new \WC_Product_Variable( $product );
-
-			$colors = $this->getProductColors( $variableProduct );
-			$sizes  = $this->getProductSizes( $variableProduct );
-
-			if ( ! empty( $colors ) ) {
-				$out['color'] = $colors;
-			}
-
-			if ( ! empty( $sizes ) ) {
-				$out['size'] = $sizes;
-			}
+		if ( count( (array) $this->options->getValue( 'map_size' ) ) ) {
+			$out['size'] = $this->getProductSizes( $product );
 		}
+
+		if ( count( (array) $this->options->getValue( 'map_color' ) ) ) {
+			$out['color'] = $this->getProductColors( $product );
+		}
+
 		if ( defined( 'SKROUTZ_DEBUG' ) ) {
 			$out['debug'] = array(
 				'product' => $product->getAttributesResume( Configuration::get( 'PS_LANG_DEFAULT' ) )
@@ -112,6 +106,10 @@ class HelperSkroutz extends Helper {
 
 		$colors = array();
 		foreach ( $colorList[ $product->id ] as $k => $color ) {
+			if( (int)$product->isColorUnavailable($color['id_attribute'], Context::getContext()->shop->id) === $color['id_product_attribute'] && !$this->backOrdersAllowed($product)){
+				continue;
+			}
+
 			array_push( $colors, $color['name'] );
 		}
 
@@ -134,6 +132,7 @@ class HelperSkroutz extends Helper {
 
 	protected function getProductSizes( Product &$product ) {
 		$mapSizes = $this->options->getValue( 'map_size' );
+
 		if ( empty( $mapSizes ) ) {
 			return null;
 		}
@@ -143,18 +142,18 @@ class HelperSkroutz extends Helper {
 			if (
 				$comp['is_color_group']
 				|| ! in_array( $comp['id_attribute'], $mapSizes )
-				|| $comp['quantity'] < 1
+				|| ($comp['quantity'] < 1 && !$this->backOrdersAllowed($product))
 			) {
 				continue;
 			}
 
-			$size = $this->sanitizeVariationString( $comp['attribute_name']);
-			if($this->isValidSizeString($size)){
-				array_push($sizes, $size);
+			$size = $this->sanitizeVariationString( $comp['attribute_name'] );
+			if ( $this->isValidSizeString( $size ) ) {
+				array_push( $sizes, $size );
 			}
 		}
 
-		return implode( ', ', $sizes );
+		return implode( ', ', array_unique($sizes) );
 	}
 
 	protected function sanitizeVariationString( $string ) {
@@ -167,11 +166,11 @@ class HelperSkroutz extends Helper {
 	protected function getProductManufacturer( Product &$product ) {
 		$option = $this->options->getValue( 'map_manufacturer' );
 
-		return $option == 0 ? $product->getWsManufacturerName() :Supplier::getNameById($product->id_supplier);
+		return $option == 0 ? $product->getWsManufacturerName() : Supplier::getNameById( $product->id_supplier );
 	}
 
 	protected function isInStock( Product &$product ) {
-		return $product->checkQty(1) ? 'Y' : 'N';
+		return ( $product->checkQty( 1 ) || $this->backOrdersAllowed( $product ) ) ? 'Y' : 'N';
 	}
 
 	protected function getProductPrice( Product &$product ) {
@@ -179,13 +178,13 @@ class HelperSkroutz extends Helper {
 
 		switch ( $option ) {
 			case 1:
-				$price = round($product->price, 2);
+				$price = round( $product->price, 2 );
 				break;
 			case 2:
-				$price = round($product->wholesale_price, 2);
+				$price = round( $product->wholesale_price, 2 );
 				break;
 			default:
-				$price = $product->getPrice(true, null, 2);
+				$price = $product->getPrice( true, null, 2 );
 				break;
 		}
 
@@ -195,41 +194,43 @@ class HelperSkroutz extends Helper {
 	protected function getProductCategories( Product &$product ) {
 		$categories = array();
 		if ( $this->options->getValue( 'map_category' ) == 1 ) {
-			$info = Tag::getProductTags($product->id);
-			if($info && !isset($info[$this->defaultLang])){
-				$categories = $info[$this->defaultLang];
+			$info = Tag::getProductTags( $product->id );
+			if ( $info && ! isset( $info[ $this->defaultLang ] ) ) {
+				$categories = $info[ $this->defaultLang ];
 			}
 		} else {
-			$info = Category::getCategoryInformations($product->getCategories());
+			$info = Category::getCategoryInformations( $product->getCategories() );
 			foreach ( $info as $cat ) {
 				// Todo is there a better way to check for home category?
-				if($cat['id_category'] == 2) continue;
-				array_push($categories, $cat['name']);
+				if ( $cat['id_category'] == 2 ) {
+					continue;
+				}
+				array_push( $categories, $cat['name'] );
 			}
 
 		}
 
-		return implode(' - ',(array)$categories);
+		return implode( ' - ', (array) $categories );
 	}
 
 	protected function getProductImageLink( Product &$product ) {
 		$link = new Link();
 
 		$imageLink = null;
-		if ( $this->options->getValue( 'map_image' ) == 1) {
-			$images = $product->getImages($this->defaultLang);
-			if(!empty($images)){
-				shuffle($images);
-				$imageLink = $link->getImageLink($product->link_rewrite, end($images)['id_image']);
+		if ( $this->options->getValue( 'map_image' ) == 1 ) {
+			$images = $product->getImages( $this->defaultLang );
+			if ( ! empty( $images ) ) {
+				shuffle( $images );
+				$imageLink = $link->getImageLink( $product->link_rewrite, end( $images )['id_image'] );
 			}
 		} else {
-			$coverImage = Image::getCover($product->id);
-			if($coverImage && !empty($coverImage) && isset($coverImage['id_image'])){
-				$imageLink = $link->getImageLink($product->link_rewrite, $coverImage['id_image']);
+			$coverImage = Image::getCover( $product->id );
+			if ( $coverImage && ! empty( $coverImage ) && isset( $coverImage['id_image'] ) ) {
+				$imageLink = $link->getImageLink( $product->link_rewrite, $coverImage['id_image'] );
 			}
 		}
 
-		return empty($imageLink) ? '' : urldecode( $this->addHttp($imageLink) );
+		return empty( $imageLink ) ? '' : urldecode( $this->addHttp( $imageLink ) );
 	}
 
 	protected function getProductId( Product &$product ) {
@@ -246,6 +247,7 @@ class HelperSkroutz extends Helper {
 				$id = $product->reference;
 				break;
 		}
+
 		return $id;
 	}
 
@@ -266,44 +268,46 @@ class HelperSkroutz extends Helper {
 				$id = $product->reference;
 				break;
 		}
+
 		return $id;
 	}
 
 	protected function getProductLink( Product &$product ) {
 		$link = new Link();
 
-		$pLink = $link->getProductLink($product);
+		$pLink = $link->getProductLink( $product );
 
-		return urldecode( $this->addHttp($pLink) );
+		return urldecode( $this->addHttp( $pLink ) );
 	}
 
 	protected function getProductName( Product &$product ) {
-		$name = is_array($product->name) && isset($product->name[$this->defaultLang]) ? $product->name[$this->defaultLang] : (is_string($product->name) ? $product->name : 0);
-		return $name . ' ' . ($this->options->getValue( 'map_name_append_sku' ) ? $this->getProductId($product) : '');
+		$name = is_array( $product->name ) && isset( $product->name[ $this->defaultLang ] ) ? $product->name[ $this->defaultLang ] : ( is_string( $product->name ) ? $product->name : 0 );
+
+		return $name . ' ' . ( $this->options->getValue( 'map_name_append_sku' ) ? $this->getProductId( $product ) : '' );
 	}
 
-	protected function addHttp($url) {
-		if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+	protected function addHttp( $url ) {
+		if ( ! preg_match( "~^(?:f|ht)tps?://~i", $url ) ) {
 			$url = "http://" . $url;
 		}
+
 		return $url;
 	}
 
 	protected function getAvailabilityString( Product &$product ) {
-		$hasStock = $product->checkQty(1);
-$stock = new Stock();
+		$hasStock = $product->checkQty( 1 );
 
 		// If product is in stock
 		if ( $hasStock ) {
 			return $this->options->availOptions[ $this->options->getValue( 'avail_inStock' ) ];
-		} elseif ( !$hasStock && StockAvailable::getQuantityAvailableByProduct($product->id) < 0 ) {
+		} elseif ( ! $hasStock && $this->backOrdersAllowed( $product ) ) {
 			// if product is out of stock and no backorders then return false
 			if ( $this->options->getValue( 'avail_backorders' ) == 0 ) {
 				return false;
 			}
 
 			// else return value
-			return $this->options->availOptions[ $this->options->getValue( 'avail_backorders' )-1 ];
+			return $this->options->availOptions[ $this->options->getValue( 'avail_backorders' ) - 1 ];
 		} elseif ( $this->options->getValue( 'avail_outOfStock' ) > 0 ) {
 			// no stock, no backorders but must include product. Return value
 			return $this->options->availOptions[ $this->options->getValue( 'avail_outOfStock' ) - 1 ];
@@ -333,9 +337,16 @@ $stock = new Stock();
 
 	public function debug() {
 		echo "<strong>not real mem usage: </strong>" . ( memory_get_peak_usage( false ) / 1024 / 1024 ) . " MiB<br>";
-		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br><br>";
-		var_dump( $this->createProductsArray() );
+		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br>";
+		$sTime = microtime(true);
+		$prodArray = $this->createProductsArray();
+		echo "<strong>time: </strong>" . ( microtime(true) - $sTime ) . " sec<br><br>";
+		var_dump( $prodArray );
 		die;
+	}
+
+	protected function backOrdersAllowed( Product $product ) {
+		return Product::isAvailableWhenOutOfStock( $product->out_of_stock ) == 1;
 	}
 
 	protected function isValidSizeString( $string ) {
