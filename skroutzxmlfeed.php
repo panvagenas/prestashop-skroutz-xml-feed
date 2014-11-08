@@ -81,9 +81,6 @@ class SkroutzXmlFeed extends Module {
 	 * @since ${VERSION}
 	 */
 	public function getContent() {
-		$this->loader->loadHelper( 'Skroutz' );
-		$skz = new HelperSkroutz();
-		d( $skz->debug() );
 		$output = null;
 
 		if ( Tools::isSubmit( 'submit' . $this->name ) ) {
@@ -109,8 +106,22 @@ class SkroutzXmlFeed extends Module {
 	}
 
 	public function hookDisplayHeader( $p ) {
-		p( 'hook' );
-		d( $p );
+		$this->loader->loadHelper('Skroutz');
+		$this->loader->loadHelper('SkroutzXML');
+		$this->loader->loadHelper('SkroutzOptions');
+		$opts = HelperSkroutzOptions::Instance();
+
+		$skz = new HelperSkroutz();
+		$xml = new HelperSkroutzXML();
+
+		$lastCreated = $opts->getValue('last_created');
+		if(time() - $lastCreated > 86400 || !file_exists($xml->getFileLocation())){
+			$result = $xml->parseArray($skz->createProductsArray());
+
+			if($result){
+				$opts->saveOptions(array('last_created' => time()));
+			}
+		}
 	}
 
 	/**
@@ -143,7 +154,6 @@ class SkroutzXmlFeed extends Module {
 		}
 		if ( ! parent::uninstall()
 		     || ! HelperSkroutzOptions::Instance()->deleteAllOptions()
-		     || ! $this->unregisterHook( 'DisplayHeader' )
 		) {
 			return false;
 		}

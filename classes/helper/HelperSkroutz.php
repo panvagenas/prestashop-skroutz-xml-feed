@@ -39,8 +39,8 @@ class HelperSkroutz extends Helper {
 		$outOfStockInclude = $this->options->getValue( 'avail_outOfStock' );
 
 		foreach ( (array) $products as $key => $product ) {
-			$p                 = new Product( $product['id_product'] );
-			$backOrdersAllowed = StockAvailable::getQuantityAvailableByProduct( $product->id ) < 0;
+			$p = new Product( $product['id_product'] );
+
 			// TODO Check for product avail etc
 
 			$hasStock = $p->checkQty( 1 );
@@ -106,7 +106,7 @@ class HelperSkroutz extends Helper {
 
 		$colors = array();
 		foreach ( $colorList[ $product->id ] as $k => $color ) {
-			if( (int)$product->isColorUnavailable($color['id_attribute'], Context::getContext()->shop->id) === $color['id_product_attribute'] && !$this->backOrdersAllowed($product)){
+			if ( (int) $product->isColorUnavailable( $color['id_attribute'], Context::getContext()->shop->id ) === $color['id_product_attribute'] && ! $this->backOrdersAllowed( $product ) ) {
 				continue;
 			}
 
@@ -114,20 +114,6 @@ class HelperSkroutz extends Helper {
 		}
 
 		return implode( ', ', $colors );
-	}
-
-	protected function getTaxonomyById( $taxonomyId ) {
-		foreach ( wc_get_attribute_taxonomies() as $taxonomy ) {
-			$options[] = array(
-				'label' => $taxonomy->attribute_label,
-				'value' => $taxonomy->attribute_id
-			);
-			if ( $taxonomyId == $taxonomy->attribute_id ) {
-				return $taxonomy;
-			}
-		}
-
-		return null;
 	}
 
 	protected function getProductSizes( Product &$product ) {
@@ -142,7 +128,7 @@ class HelperSkroutz extends Helper {
 			if (
 				$comp['is_color_group']
 				|| ! in_array( $comp['id_attribute'], $mapSizes )
-				|| ($comp['quantity'] < 1 && !$this->backOrdersAllowed($product))
+				|| ( $comp['quantity'] < 1 && ! $this->backOrdersAllowed( $product ) )
 			) {
 				continue;
 			}
@@ -153,7 +139,7 @@ class HelperSkroutz extends Helper {
 			}
 		}
 
-		return implode( ', ', array_unique($sizes) );
+		return implode( ', ', array_unique( $sizes ) );
 	}
 
 	protected function sanitizeVariationString( $string ) {
@@ -338,9 +324,9 @@ class HelperSkroutz extends Helper {
 	public function debug() {
 		echo "<strong>not real mem usage: </strong>" . ( memory_get_peak_usage( false ) / 1024 / 1024 ) . " MiB<br>";
 		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br>";
-		$sTime = microtime(true);
+		$sTime     = microtime( true );
 		$prodArray = $this->createProductsArray();
-		echo "<strong>time: </strong>" . ( microtime(true) - $sTime ) . " sec<br><br>";
+		echo "<strong>time: </strong>" . ( microtime( true ) - $sTime ) . " sec<br><br>";
 		var_dump( $prodArray );
 		die;
 	}

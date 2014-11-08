@@ -77,7 +77,8 @@ final class HelperSkroutzOptions {
 			 * Fashion store
 			 ***********************************************/
 			'is_fashion_store'    => 0,
-			'is_book_store'       => 0
+			'is_book_store'       => 0,
+			'last_created' => 0,
 		);
 
 		$this->stored = unserialize( Configuration::get( $this->optionsArrayName ) );
@@ -153,81 +154,86 @@ final class HelperSkroutzOptions {
 			}
 		}
 
+		$defaults = array_merge($this->defaults, $this->stored);
+
 		$newOptions['xml_location'] = isset( $newOptions['xml_location'] )
 		                              && is_string( $newOptions['xml_location'] )
 		                              && ( is_writable( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) || ! is_dir( _PS_ROOT_DIR_ . '/' . $newOptions['xml_location'] ) )
-			? pSQL( ltrim( $newOptions['xml_location'], '/\\' ) ) : $this->defaults['xml_location'];
+			? pSQL( ltrim( $newOptions['xml_location'], '/\\' ) ) : $defaults['xml_location'];
 
 		$newOptions['xml_fileName'] = isset( $newOptions['xml_fileName'] )
 		                              && is_string( $newOptions['xml_fileName'] )
 		                              && Validate::isFileName( $newOptions['xml_fileName'] )
-			? pSQL( $newOptions['xml_fileName'] ) : $this->defaults['xml_fileName'];
+			? pSQL( $newOptions['xml_fileName'] ) : $defaults['xml_fileName'];
 
 		$newOptions['xml_interval'] = isset( $newOptions['xml_interval'] )
 		                              && is_string( $newOptions['xml_interval'] )
-			? pSQL( $newOptions['xml_interval'] ) : $this->defaults['xml_interval'];
+			? pSQL( $newOptions['xml_interval'] ) : $defaults['xml_interval'];
 
 		$newOptions['avail_inStock'] = isset( $newOptions['avail_inStock'] )
 		                               && is_numeric( $newOptions['avail_inStock'] )
-			? (int) $newOptions['avail_inStock'] : (int) $this->defaults['avail_inStock'];
+			? (int) $newOptions['avail_inStock'] : (int) $defaults['avail_inStock'];
 
 		$newOptions['avail_outOfStock'] = isset( $newOptions['avail_outOfStock'] )
 		                                  && is_numeric( $newOptions['avail_outOfStock'] )
-			? (int) $newOptions['avail_outOfStock'] : (int) $this->defaults['avail_outOfStock'];
+			? (int) $newOptions['avail_outOfStock'] : (int) $defaults['avail_outOfStock'];
 
 		$newOptions['avail_backorders'] = isset( $newOptions['avail_backorders'] )
 		                                  && is_numeric( $newOptions['avail_outOfStock'] )
-			? (int) $newOptions['avail_backorders'] : (int) $this->defaults['avail_backorders'];
+			? (int) $newOptions['avail_backorders'] : (int) $defaults['avail_backorders'];
 
 		$newOptions['map_id'] = isset( $newOptions['map_id'] )
 		                        && is_numeric( $newOptions['map_id'] )
-			? (int) $newOptions['map_id'] : (int) $this->defaults['map_id'];
+			? (int) $newOptions['map_id'] : (int) $defaults['map_id'];
 
 		$newOptions['map_name'] = isset( $newOptions['map_name'] )
 		                          && is_numeric( $newOptions['map_name'] )
-			? (int) $newOptions['map_name'] : (int) $this->defaults['map_name'];
+			? (int) $newOptions['map_name'] : (int) $defaults['map_name'];
 
 		$newOptions['map_name_append_sku'] = isset( $newOptions['map_name_append_sku'] )
 		                                     && is_numeric( $newOptions['map_name_append_sku'] )
-			? (int) $newOptions['map_name_append_sku'] : (int) $this->defaults['map_name_append_sku'];
+			? (int) $newOptions['map_name_append_sku'] : (int) $defaults['map_name_append_sku'];
 
 		$newOptions['map_link'] = isset( $newOptions['map_link'] )
 		                          && is_numeric( $newOptions['map_link'] )
-			? (int) $newOptions['map_link'] : (int) $this->defaults['map_link'];
+			? (int) $newOptions['map_link'] : (int) $defaults['map_link'];
 
 		$newOptions['map_image'] = isset( $newOptions['map_image'] )
 		                           && is_numeric( $newOptions['map_image'] )
-			? (int) $newOptions['map_image'] : (int) $this->defaults['map_image'];
+			? (int) $newOptions['map_image'] : (int) $defaults['map_image'];
 
 		$newOptions['map_price_with_vat'] = isset( $newOptions['map_price_with_vat'] )
 		                                    && is_numeric( $newOptions['map_price_with_vat'] )
-			? (int) $newOptions['map_price_with_vat'] : (int) $this->defaults['map_price_with_vat'];
+			? (int) $newOptions['map_price_with_vat'] : (int) $defaults['map_price_with_vat'];
 
 		$newOptions['map_manufacturer'] = isset( $newOptions['map_manufacturer'] )
 		                                  && is_numeric( $newOptions['map_manufacturer'] )
-			? (int) $newOptions['map_manufacturer'] : (int) $this->defaults['map_manufacturer'];
+			? (int) $newOptions['map_manufacturer'] : (int) $defaults['map_manufacturer'];
 
 		$newOptions['map_mpn'] = isset( $newOptions['map_mpn'] )
 		                         && is_numeric( $newOptions['map_mpn'] )
-			? (int) $newOptions['map_mpn'] : (int) $this->defaults['map_mpn'];
+			? (int) $newOptions['map_mpn'] : (int) $defaults['map_mpn'];
 
 		$newOptions['map_isbn'] = isset( $newOptions['map_isbn'] )
 		                          && is_numeric( $newOptions['map_isbn'] )
-			? (int) $newOptions['map_isbn'] : (int) $this->defaults['map_isbn'];
+			? (int) $newOptions['map_isbn'] : (int) $defaults['map_isbn'];
 
 		$newOptions['map_size'] = isset( $newOptions['map_size'] )
 		                          && is_array( $newOptions['map_size'] )
-			? $newOptions['map_size'] : $this->defaults['map_size'];
+			? $newOptions['map_size'] : $defaults['map_size'];
 
 		$newOptions['map_color'] = isset( $newOptions['map_color'] )
 		                           && is_array( $newOptions['map_color'] )
-			? $newOptions['map_color'] : $this->defaults['map_color'];
+			? $newOptions['map_color'] : $defaults['map_color'];
 
 		$newOptions['is_fashion_store'] = isset( $newOptions['is_fashion_store'] )
-			? (int) $newOptions['is_fashion_store'] : (int) $this->defaults['is_fashion_store'];
+			? (int) $newOptions['is_fashion_store'] : (int) $defaults['is_fashion_store'];
 
 		$newOptions['is_book_store'] = isset( $newOptions['is_book_store'] )
-			? (int) $newOptions['is_book_store'] : (int) $this->defaults['is_book_store'];
+			? (int) $newOptions['is_book_store'] : (int) $defaults['is_book_store'];
+
+		$newOptions['last_created'] = isset( $newOptions['last_created'] )
+			? (int) $newOptions['last_created'] : (int) $defaults['last_created'];
 
 		return $newOptions;
 	}

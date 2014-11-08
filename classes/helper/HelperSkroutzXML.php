@@ -10,7 +10,7 @@
 if (!defined('_PS_VERSION_'))
   exit;
   
-class HelperXML {
+class HelperSkroutzXML {
 	protected $skzXMLFields = array(
 		'id',
 		'name',
@@ -199,7 +199,7 @@ class HelperXML {
 	 * @return bool
 	 * @throws exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	protected function loadXML() {
 		/**
@@ -207,7 +207,7 @@ class HelperXML {
 		 */
 		$this->fileLocation = $this->getFileLocation();
 
-		unlink( $this->fileLocation );
+		@unlink( $this->fileLocation );
 
 		return false;
 
@@ -308,7 +308,7 @@ class HelperXML {
 	 *
 	 * @return null|array
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	public function xmlToXpath( $xml ) {
 		$sxi = new \SimpleXmlIterator( $xml );
@@ -321,7 +321,7 @@ class HelperXML {
 	 *
 	 * @throws exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	public function printXML() {
 		if ( ! ( $this->simpleXML instanceof \SimpleXMLExtended ) ) {
@@ -342,14 +342,14 @@ class HelperXML {
 	 * @return string
 	 * @throws exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	public function getFileLocation() {
 		$opts = HelperSkroutzOptions::Instance();
-		$location =  $opts->getValue( 'xml_location' );
+		$location =  trim($opts->getValue( 'xml_location' ), '\\/ ' );
 		$fileName = $opts->getValue( 'xml_fileName' );
 
-		return rtrim( _PS_ROOT_DIR_, '\\/' ) . '/' . ltrim(rtrim( $location, '\\/' ), '\\/') . '/' . rtrim(ltrim($fileName, '\\/'), '\\/');
+		return rtrim( _PS_ROOT_DIR_, '\\/' ) . '/' . (empty($location) ? '' : $location . '/' ) . rtrim(ltrim($fileName, '\\/'), '\\/');
 	}
 
 	/**
@@ -357,7 +357,7 @@ class HelperXML {
 	 *
 	 * @return array|null
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	public function getFileInfo() {
 		$fileLocation = $this->getFileLocation();
@@ -387,7 +387,7 @@ class HelperXML {
 	 *
 	 * @return int Total products in file
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	public function countProductsInFile( $file ) {
 		if ( $this->existsAndReadable( $file ) ) {
@@ -414,7 +414,7 @@ class HelperXML {
 	 *
 	 * @return bool
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO Enter Product ${VERSION}
+	 * @since 0.1
 	 */
 	protected function existsAndReadable( $file ) {
 		return is_string( $file ) && file_exists( $file ) && is_readable( $file );
