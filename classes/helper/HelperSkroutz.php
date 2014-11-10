@@ -182,11 +182,14 @@ class HelperSkroutz extends Helper {
 		if ( $this->options->getValue( 'map_category' ) == 1 ) {
 			$info = Tag::getProductTags( $product->id );
 			if ( $info && ! isset( $info[ $this->defaultLang ] ) ) {
-				$categories = $info[ $this->defaultLang ];
+				$categories = (array)$info[ $this->defaultLang ];
 			}
 		} else {
 			$info = Category::getCategoryInformations( $product->getCategories() );
-			foreach ( $info as $cat ) {
+			if(!is_array($info) || empty($info)){
+				return '';
+			}
+			foreach ( (array)$info as $cat ) {
 				// Todo is there a better way to check for home category?
 				if ( $cat['id_category'] == 2 ) {
 					continue;
