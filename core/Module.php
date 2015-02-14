@@ -142,7 +142,7 @@ if (!class_exists('XDaRk\Module')) {
 		}
 
 		/**
-		 * @extend
+		 * @extend Always call parent construct before implementing custom logic
 		 */
 		public function __construct()
 		{

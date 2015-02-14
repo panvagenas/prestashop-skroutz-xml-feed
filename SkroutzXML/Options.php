@@ -5,7 +5,7 @@
  * User: Panagiotis Vagenas <pan.vagenas@gmail.com>
  * Date: 13/2/2015
  * Time: 10:25 πμ
- * Since: TODO ${VERSION}
+ * Since: 150213
  * Copyright: 2015 Panagiotis Vagenas
  */
 
@@ -34,7 +34,7 @@ class Options extends \XDaRk\Options {
 	 * @param $validators
 	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO ${VERSION}
+	 * @since 150213
 	 */
 	protected function setUp( $defaults, $validators ) {
 		/***********************************************
@@ -105,7 +105,7 @@ class Options extends \XDaRk\Options {
 			// File name
 			'xml_fileName'        => array( 'string:!empty' ),
 			// Generation interval
-			'xml_interval'        => array( 'in_array' => $this->xmlIntervalOptions ),
+			'xml_interval'        => array( 'string:in_array' => $this->xmlIntervalOptions ),
 			/*********************
 			 * Products relative
 			 ********************/
@@ -150,6 +150,8 @@ class Options extends \XDaRk\Options {
 			'is_fashion_store'    => array( 'string:numeric >=' => 0, 'string:numeric <=' => 1 ),
 			'is_book_store'       => array( 'string:numeric >=' => 0, 'string:numeric <=' => 1 ),
 			'last_created'        => array( 'string:numeric' ),
+			'request_var'         => array( 'string:!empty' ),
+			'request_var_value'   => array( 'string:!empty' ),
 		);
 		parent::setUp( array_merge( $defaults, $options ), array_merge( $validators, $moduleValidators ) );
 	}

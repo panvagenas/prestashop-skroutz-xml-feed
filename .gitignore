@@ -13,6 +13,8 @@ cache/tcpdf/*
 config/xml/*.xml
 config/settings.inc.php
 
+config.xml
+
 log/*.log
 
 img/*

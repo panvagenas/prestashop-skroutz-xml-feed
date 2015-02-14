@@ -139,7 +139,7 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function addSelectField($label, $name, Array $options, $required = true, $hint = false, $class = '', $description = false, $optionId = 'id_option', $optionName = 'name', $prefix = false, $suffix = false)
+	public function addSelectField($label, $name, Array $options, $required = true, $hint = false, $class = '', $description = false, $optionId = 'value', $optionName = 'name', $prefix = false, $suffix = false)
 	{
 		$f = array(
 			'type'     => 'select',
@@ -184,7 +184,6 @@ class Panel extends Core
 	 * @param bool $prefix
 	 * @param bool $suffix
 	 *
-	 * @internal param string $optionId
 	 * @return $this
 	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
@@ -253,7 +252,7 @@ class Panel extends Core
 		$suffix = false
 	) {
 		$f = array(
-			'type'     => 'select',
+			'type'     => 'switch',
 			'label'    => $label,
 			'name'     => $name,
 			'class'    => $class,
@@ -276,6 +275,31 @@ class Panel extends Core
 		$this->addField($f);
 
 		return $this;
+	}
+
+	public function addYesNoField(
+		$label,
+		$name,
+		$required = true,
+		$hint = false,
+		$class = '',
+		$description = false,
+		$prefix = false,
+		$suffix = false
+	){
+		$yesNo = array(
+			array(
+				'id'    => $name.'_on',
+				'value' => 1,
+				'label' => $this->moduleInstance->l( 'Yes' )
+			),
+			array(
+				'id'    => $name.'_off',
+				'value' => 0,
+				'label' => $this->moduleInstance->l( 'No' )
+			)
+		);
+		return $this->addSwitchField($label, $name, $yesNo, $required, true, $hint, $class, $description, $prefix, $suffix);
 	}
 
 

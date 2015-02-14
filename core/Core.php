@@ -15,6 +15,7 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 if(!class_exists('XDaRk\Core')) {
+	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'Stub.php';
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'Module.php';
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'CarrierModule.php';
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'PaymentModule.php';
@@ -39,8 +40,10 @@ if(!class_exists('XDaRk\Core')) {
 	 * @property \XDaRk\Method          Method
 	 * @property \XDaRk\String          String
 	 * @property \XDaRk\Vars            Vars
+	 * @property \XDaRk\Url             Url
+	 * @property \XDaRk\Integer         Integer
 	 */
-	class Core implements Constants {
+	class Core implements Constants{
 		public static $singletonClasses = array();
 
 		public static $classes = array();
@@ -58,6 +61,18 @@ if(!class_exists('XDaRk\Core')) {
 
 		public $moduleInstance;
 		public $instanceNamespaceClass;
+
+		/**
+		 * An instance-based reference to the global/static cache for the current blog ID & class extender.
+		 *
+		 * @var array An instance-based reference to the global/static cache for the current blog ID & class extender.
+		 *
+		 * @final Should NOT be overridden by class extenders.
+		 *    Would be `final` if PHP allowed such a thing.
+		 *
+		 * @protected Accessible only to self & extenders.
+		 */
+		protected $static = array();
 
 		public function __get( $name ) {
 			if ( property_exists( $this, $name ) ) {
@@ -95,6 +110,12 @@ if(!class_exists('XDaRk\Core')) {
 
 
 			return null;
+		}
+
+
+		public static function __callStatic($name, $arguments)
+		{
+			return Stub::$name($arguments);
 		}
 
 		public function __isset( $name ) {

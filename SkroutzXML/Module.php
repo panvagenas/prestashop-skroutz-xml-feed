@@ -11,10 +11,13 @@
 
 namespace SkroutzXML;
 
+use SkroutzXML\Panels\MainOptions;
+use SkroutzXML\Panels\MapOptions;
+
 if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
 }
-require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Module.php';
+require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Core.php';
 
 class Module extends \XDaRk\Module{
 	/**
@@ -58,14 +61,28 @@ class Module extends \XDaRk\Module{
 	 */
 	public $bootstrap = true;
 
+
+	public function __construct()
+	{
+		parent::__construct();
+
+		$requestVarValue = $this->Options->getValue('request_var_value');
+		if(empty($requestVarValue)){
+			$this->Options->saveOptions(array('request_var_value' => uniqid().uniqid()));
+		}
+	}
+
 	/**
 	 * @return string
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150202
 	 */
 	protected function xdGetContent() {
-		return '';
-
+		return $this->Form
+			->registerPanel(new MainOptions($this))
+			->registerPanel(new MapOptions($this))
+			->initialize($this)
+			->generateForm($this->Options->getOptionsArray());
 	}
 }
 
