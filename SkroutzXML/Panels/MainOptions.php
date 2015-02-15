@@ -35,15 +35,15 @@ class MainOptions extends Panel {
 
 		$options = array();
 		foreach ( $this->Options->availOptions as $k => $v ) {
-			$options[] = array( 'name' => $v, 'value' => $k + 1 );
+			$options[] = array( 'name' => $v, 'value' => $k );
 		}
 
 		$this->addSelectField( 'Product availability when in stock', 'avail_inStock', $options, true, $this->moduleInstance->l('This the product availability when this is in stock. It should match store availability string') );
 
 		$options   = array();
-		$options[] = array( 'name' => 'Do not include', 'value' => 1 );
+		$options[] = array( 'name' => 'Do not include', 'value' => 0 );
 		foreach ( $this->Options->availOptions as $k => $v ) {
-			$options[] = array( 'name' => $v, 'value' => $k + 2 );
+			$options[] = array( 'name' => $v, 'value' => $k + 1 );
 		}
 
 		$this->addSelectField( 'Product availability when out of stock', 'avail_outOfStock', $options, true, $this->moduleInstance->l('This the product availability when this is out stock. It should reflect store availability so default is "Do not include"') )

@@ -56,37 +56,37 @@ class Options extends \XDaRk\Options {
 			 * Products relative
 			 ********************/
 			// Availability when products in stock
-			'avail_inStock'       => 1,
+			'avail_inStock'       => '1',
 			// Availability when products out stock
-			'avail_outOfStock'    => 0,
+			'avail_outOfStock'    => '0',
 			// Availability when products out stock and backorders are allowed
-			'avail_backorders'    => 5,
+			'avail_backorders'    => '0',
 			// Include disabled products
-			'include_disabled'    => 0,
+			'include_disabled'    => '0',
 			/*********************
 			 * Custom fields
 			 ********************/
-			'map_id'              => 0,
-			'map_name'            => 0,
-			'map_name_append_sku' => 1,
-			'map_link'            => 0,
-			'map_image'           => 0,
-			'map_category'        => 0,
-			'map_price_with_vat'  => 0,
-			'map_manufacturer'    => 0,
-			'map_mpn'             => 0,
-			'map_isbn'            => 0,
+			'map_id'              => '0',
+			'map_name'            => '0',
+			'map_name_append_sku' => '1',
+			'map_link'            => '0',
+			'map_image'           => '0',
+			'map_category'        => '0',
+			'map_price_with_vat'  => '0',
+			'map_manufacturer'    => '0',
+			'map_mpn'             => '0',
+			'map_isbn'            => '0',
 			'map_size'            => array(),
 			'map_color'           => array(),
 			/********************
 			 * Fashion store, book store
 			 ********************/
-			'is_fashion_store'    => 0,
-			'is_book_store'       => 0,
+			'is_fashion_store'    => '0',
+			'is_book_store'       => '0',
 			/********************
 			 * General options
 			 ********************/
-			'last_created'        => 0,
+			'last_created'        => '0',
 			'request_var'         => 'skroutz',
 			'request_var_value'   => '',
 		);

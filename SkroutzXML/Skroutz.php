@@ -66,7 +66,7 @@ class Skroutz extends Core {
 
 			// TODO Check for product avail etc
 
-			$hasStock = $p->checkQty( 1 );
+			$hasStock = $p->getRealQuantity($p->id) > 0; // TODO Is this a convenient way?
 
 			if ( $p->getType() != 0
 			     || $p->visibility == 'none'
@@ -77,17 +77,17 @@ class Skroutz extends Core {
 				continue;
 			}
 
-			if(!$hasStock
-			   && (!$outOfStockInclude
-			       || (!$backOrdersInclude && $p->quantity < 0)
-				)
-			){
-					var_dump( $backOrdersInclude, $outOfStockInclude, ( ( ! $backOrdersInclude || ! $outOfStockInclude ) && ! $hasStock ) );
-					d( $products[ $key ] );
-
+			if(!$hasStock ){
+				// TODO backOrdersAllowed not working as expected
+				if($p->getRealQuantity($p->id) == 0 && !$outOfStockInclude){
 					unset( $products[ $key ] );
 					// TODO Log skipped product
 					continue;
+				} else if($p->getRealQuantity($p->id) < 0 && (!$backOrdersInclude || !$this->backOrdersAllowed($p))){ // quantity < 0
+					unset( $products[ $key ] );
+					// TODO Log skipped product
+					continue;
+				}
 			}
 
 			$pushArray = $this->getProductArray( $p );
@@ -315,12 +315,12 @@ class Skroutz extends Core {
 	}
 
 	protected function getAvailabilityString( \Product &$product ) {
-		$hasStock = $product->checkQty( 1 );
+		$hasStock = $product->getRealQuantity($product->id) > 0;
 
 		// If product is in stock
 		if ( $hasStock ) {
 			return $this->Options->availOptions[ $this->Options->getValue( 'avail_inStock' ) ];
-		} elseif ( ! $hasStock && $this->backOrdersAllowed( $product ) ) {
+		} elseif ( $this->backOrdersAllowed( $product ) ) {
 			// if product is out of stock and no backorders then return false
 			if ( $this->Options->getValue( 'avail_backorders' ) == 0 ) {
 				return false;
