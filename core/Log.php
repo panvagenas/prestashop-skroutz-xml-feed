@@ -9,7 +9,7 @@
  * Copyright: 2015 Panagiotis Vagenas
  */
 
-namespace XDaRk;
+namespace XDaRk_v141110;
 
 
 class Log {

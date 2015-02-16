@@ -11,7 +11,7 @@
 
 namespace SkroutzXML;
 
-class XML extends \XDaRk\XML{
+class XML extends \XDaRk_v141110\XML{
 	protected $skzXMLFields = array(
 		'id',
 		'name',

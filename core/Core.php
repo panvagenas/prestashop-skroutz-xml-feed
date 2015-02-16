@@ -9,12 +9,12 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk;
+namespace XDaRk_v141110;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if(!class_exists('XDaRk\Core')) {
+if(!class_exists('XDaRk_v141110\Core')) {
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'Stub.php';
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'Module.php';
 	require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'CarrierModule.php';
@@ -28,20 +28,20 @@ if(!class_exists('XDaRk\Core')) {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 *
-	 * @property \XDaRk\Module          Module
-	 * @property \XDaRk\Dir             Dir
-	 * @property \XDaRk\File            File
-	 * @property \XDaRk\Form            Form
-	 * @property \XDaRk\Hooks           Hooks
-	 * @property \XDaRk\Installer       Installer
-	 * @property \XDaRk\Options         Options
-	 * @property \XDaRk\XML             XML
-	 * @property \XDaRk\Exception       Exception
-	 * @property \XDaRk\Method          Method
-	 * @property \XDaRk\String          String
-	 * @property \XDaRk\Vars            Vars
-	 * @property \XDaRk\Url             Url
-	 * @property \XDaRk\Integer         Integer
+	 * @property \XDaRk_v141110\Module          Module
+	 * @property \XDaRk_v141110\Dir             Dir
+	 * @property \XDaRk_v141110\File            File
+	 * @property \XDaRk_v141110\Form            Form
+	 * @property \XDaRk_v141110\Hooks           Hooks
+	 * @property \XDaRk_v141110\Installer       Installer
+	 * @property \XDaRk_v141110\Options         Options
+	 * @property \XDaRk_v141110\XML             XML
+	 * @property \XDaRk_v141110\Exception       Exception
+	 * @property \XDaRk_v141110\Method          Method
+	 * @property \XDaRk_v141110\String          String
+	 * @property \XDaRk_v141110\Vars            Vars
+	 * @property \XDaRk_v141110\Url             Url
+	 * @property \XDaRk_v141110\Integer         Integer
 	 */
 	class Core implements Constants{
 		public static $singletonClasses = array();

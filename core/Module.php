@@ -9,12 +9,12 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk;
+namespace XDaRk_v141110;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if (!class_exists('XDaRk\Module')) {
+if (!class_exists('XDaRk_v141110\Module')) {
 
 	/**
 	 * Class Module
@@ -22,14 +22,14 @@ if (!class_exists('XDaRk\Module')) {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 *
-	 * @property \XDaRk\Dir             Dir
-	 * @property \XDaRk\File            File
-	 * @property \XDaRk\Form            Form
-	 * @property \XDaRk\Hooks           Hooks
-	 * @property \XDaRk\Installer       Installer
-	 * @property \XDaRk\Options         Options
-	 * @property \XDaRk\XML             XML
-	 * @property \XDaRk\Exception       Exception
+	 * @property \XDaRk_v141110\Dir             Dir
+	 * @property \XDaRk_v141110\File            File
+	 * @property \XDaRk_v141110\Form            Form
+	 * @property \XDaRk_v141110\Hooks           Hooks
+	 * @property \XDaRk_v141110\Installer       Installer
+	 * @property \XDaRk_v141110\Options         Options
+	 * @property \XDaRk_v141110\XML             XML
+	 * @property \XDaRk_v141110\Exception       Exception
 	 */
 	abstract class Module extends \Module
 	{
@@ -68,7 +68,7 @@ if (!class_exists('XDaRk\Module')) {
 		/**
 		 * @var string
 		 */
-		public $displayName = 'XDaRk Core Module';
+		public $displayName = 'XDaRk_v141110 Core Module';
 		/**
 		 * @var bool
 		 */
@@ -122,7 +122,7 @@ if (!class_exists('XDaRk\Module')) {
 			$this->loader->register();
 
 			// Register core namespace
-			$this->loader->addNamespace('\XDaRk', dirname(__FILE__));
+			$this->loader->addNamespace('\XDaRk_v141110', dirname(__FILE__));
 
 			$this->core              = Core::getInstance($this);
 			Core::$instanceNamespace = $GLOBALS[ $this->name ]['root_ns'];

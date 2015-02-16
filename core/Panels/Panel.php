@@ -9,9 +9,9 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk\Panels;
+namespace XDaRk_v141110\Panels;
 
-use XDaRk\Core;
+use XDaRk_v141110\Core;
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -21,7 +21,7 @@ class Panel extends Core
 {
 	protected $tab = 0;
 	protected $type = 'main';
-	protected $title = 'XDaRk Core Options Panel';
+	protected $title = 'XDaRk_v141110 Core Options Panel';
 	protected $image = false; // TODO set a default image
 	protected $input = array();
 	protected $submit = array(

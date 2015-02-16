@@ -19,7 +19,7 @@ if ( ! defined( '_PS_VERSION_' ) ) {
 }
 require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Core.php';
 
-class Module extends \XDaRk\Module{
+class Module extends \XDaRk_v141110\Module{
 	/**
 	 * @var string Name of this plugin
 	 */

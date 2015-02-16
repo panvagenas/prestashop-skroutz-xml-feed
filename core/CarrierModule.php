@@ -9,12 +9,12 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk;
+namespace XDaRk_v141110;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if(!class_exists('\XDaRk\CarrierModule')){
+if(!class_exists('\XDaRk_v141110\CarrierModule')){
 	abstract class CarrierModule extends Module {
 		public $id_carrier;
 
