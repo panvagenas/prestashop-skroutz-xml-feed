@@ -21,6 +21,13 @@ namespace SkroutzXML;
  * @property \SkroutzXML\XML        XML
  */
 class Hooks extends \XDaRk_v141110\Hooks{
+	/**
+	 * @param $p
+	 *
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since TODO ${VERSION}
+	 */
 	public function hookDisplayHeader( $p ) {
 		$queryVars = $this->Vars->getQueryVars();
 		if(isset($queryVars[$this->Options->getValue('request_var')]) && $queryVars[$this->Options->getValue('request_var')] === $this->Options->getValue('request_var_value')){

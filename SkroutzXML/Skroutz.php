@@ -21,13 +21,24 @@ use XDaRk_v141110\Core;
  * @since 150213
  */
 class Skroutz extends Core {
+	/**
+	 * @var int
+	 */
 	private $defaultLang;
 
+	/**
+	 * @param \Module $moduleInstance
+	 */
 	public function __construct( \Module &$moduleInstance ) {
 		parent::__construct( $moduleInstance );
 		$this->defaultLang = \Configuration::get( 'PS_LANG_DEFAULT' );
 	}
 
+	/**
+	 * @return bool|int|void
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	public function generateXMLFile() {
 		$productsArray = $this->createProductsArray();
 		if ( ! $this->XML->parseArray( $productsArray ) ) {
@@ -39,7 +50,7 @@ class Skroutz extends Core {
 
 	/**
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
-	 * @since TODO ${VERSION}
+	 * @since 150213
 	 */
 	public function printXMLFile() {
 		$interval         = $this->getGenerationInterval();
@@ -55,6 +66,12 @@ class Skroutz extends Core {
 		exit( 0 );
 	}
 
+	/**
+	 * @return array
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	public function createProductsArray() {
 		$products = \Product::getProducts( $this->defaultLang, 0, 0, 'id_product', 'ASC', false, $this->Options->getValue( 'include_disabled' ) );
 
@@ -103,6 +120,14 @@ class Skroutz extends Core {
 		return $products;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return array
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductArray( \Product &$product ) {
 		$out = array();
 
@@ -128,6 +153,13 @@ class Skroutz extends Core {
 		return $out;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductColors( \Product &$product ) {
 		$colorList = \Product::getAttributesColorList( array( $product->id ) );
 
@@ -147,6 +179,14 @@ class Skroutz extends Core {
 		return implode( ', ', $colors );
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return null|string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductSizes( \Product &$product ) {
 		$mapSizes = $this->Options->getValue( 'map_size' );
 
@@ -173,6 +213,13 @@ class Skroutz extends Core {
 		return implode( ', ', array_unique( $sizes ) );
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return mixed|string
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function sanitizeVariationString( $string ) {
 		$string = preg_replace( "/[^A-Za-z0-9 ]/", '.', strip_tags( trim( $string ) ) );
 		$string = strtoupper( $string );
@@ -180,16 +227,39 @@ class Skroutz extends Core {
 		return $string;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return mixed
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductManufacturer( \Product &$product ) {
 		$option = $this->Options->getValue( 'map_manufacturer' );
 
 		return $option == 0 ? $product->getWsManufacturerName() : \Supplier::getNameById( $product->id_supplier );
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function isInStock( \Product &$product ) {
 		return ( $product->checkQty( 1 ) || $this->backOrdersAllowed( $product ) ) ? 'Y' : 'N';
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return float
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductPrice( \Product &$product ) {
 		$option = $this->Options->getValue( 'map_price_with_vat' );
 
@@ -208,6 +278,14 @@ class Skroutz extends Core {
 		return $price;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductCategories( \Product &$product ) {
 		$categories = array();
 		if ( $this->Options->getValue( 'map_category' ) == 1 ) {
@@ -233,6 +311,14 @@ class Skroutz extends Core {
 		return implode( ' - ', (array) $categories );
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductImageLink( \Product &$product ) {
 		$link = new \Link();
 
@@ -253,6 +339,14 @@ class Skroutz extends Core {
 		return empty( $imageLink ) ? '' : urldecode( $this->addHttp( $imageLink ) );
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductId( \Product &$product ) {
 		$option = $this->Options->getValue( 'map_id' );
 
@@ -271,6 +365,14 @@ class Skroutz extends Core {
 		return $id;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductMPN( \Product &$product ) {
 		$option = $this->Options->getValue( 'map_mpn' );
 
@@ -292,6 +394,14 @@ class Skroutz extends Core {
 		return $id;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \PrestaShopException
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductLink( \Product &$product ) {
 		$link = new \Link();
 
@@ -300,12 +410,27 @@ class Skroutz extends Core {
 		return urldecode( $this->addHttp( $pLink ) );
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return string
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getProductName( \Product &$product ) {
 		$name = is_array( $product->name ) && isset( $product->name[ $this->defaultLang ] ) ? $product->name[ $this->defaultLang ] : ( is_string( $product->name ) ? $product->name : 0 );
 
 		return $name . ' ' . ( $this->Options->getValue( 'map_name_append_sku' ) ? $this->getProductId( $product ) : '' );
 	}
 
+	/**
+	 * @param $url
+	 *
+	 * @return string
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function addHttp( $url ) {
 		if ( ! preg_match( "~^(?:f|ht)tps?://~i", $url ) ) {
 			$url = "http://" . $url;
@@ -314,6 +439,14 @@ class Skroutz extends Core {
 		return $url;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getAvailabilityString( \Product &$product ) {
 		$hasStock = $product->getRealQuantity($product->id) > 0;
 
@@ -336,6 +469,13 @@ class Skroutz extends Core {
 		return false;
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return mixed|string
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function formatSizeColorStrings( $string ) {
 		if ( is_array( $string ) ) {
 			array_walk( $string, function ( $item, $key ) {
@@ -355,6 +495,10 @@ class Skroutz extends Core {
 		return preg_replace( $patterns, $replacements, $string );
 	}
 
+	/**
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	public function debug() {
 		echo "<strong>not real mem usage: </strong>" . ( memory_get_peak_usage( false ) / 1024 / 1024 ) . " MiB<br>";
 		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br>";
@@ -365,10 +509,24 @@ class Skroutz extends Core {
 		die;
 	}
 
+	/**
+	 * @param \Product $product
+	 *
+	 * @return bool
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function backOrdersAllowed( \Product $product ) {
 		return \Product::isAvailableWhenOutOfStock( $product->out_of_stock ) == 1;
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return bool
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function isValidSizeString( $string ) {
 		if ( is_numeric( $string ) ) {
 			return true;
@@ -393,6 +551,11 @@ class Skroutz extends Core {
 		return in_array( $string, $validStrings );
 	}
 
+	/**
+	 * @return int
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 150213
+	 */
 	protected function getGenerationInterval() {
 		return 86400;
 	}

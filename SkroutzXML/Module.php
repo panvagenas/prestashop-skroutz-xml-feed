@@ -61,7 +61,9 @@ class Module extends \XDaRk_v141110\Module{
 	 */
 	public $bootstrap = true;
 
-
+	/**
+	 * @throws \Exception
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -85,7 +87,9 @@ class Module extends \XDaRk_v141110\Module{
 			->generateForm($this->Options->getOptionsArray());
 	}
 }
-
+/***********************************************
+* Init core module specs
+***********************************************/
 $GLOBALS['skroutzxmlfeed'] = array(
 	'root_ns' => __NAMESPACE__,
 	'var_ns'  => 'skz',

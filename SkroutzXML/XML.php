@@ -12,6 +12,9 @@
 namespace SkroutzXML;
 
 class XML extends \XDaRk_v141110\XML{
+	/**
+	 * @var array
+	 */
 	protected $skzXMLFields = array(
 		'id',
 		'name',
@@ -26,7 +29,9 @@ class XML extends \XDaRk_v141110\XML{
 		'size',
 		'color',
 	);
-
+	/**
+	 * @var array
+	 */
 	protected $skzXMLFieldsLengths = array(
 		'id'             => 200,
 		'name'           => 300,
@@ -41,7 +46,9 @@ class XML extends \XDaRk_v141110\XML{
 		'size'           => 500,
 		'color'          => 100,
 	);
-
+	/**
+	 * @var array
+	 */
 	protected $skzXMLRequiredFields = array(
 		'id',
 		'name',
