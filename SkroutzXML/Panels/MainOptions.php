@@ -30,7 +30,7 @@ class MainOptions extends Panel {
 
 		$this->addTextField( 'XML Generate Request Variable Name', 'request_var' )
 		     ->addTextField( 'XML Generate Request Variable Value', 'request_var_value' )
-		     ->addTextField( 'XML file path', 'xml_location', true, $this->moduleInstance->l( 'File path relative to your PrestaShop install folder. eg "upload" is the PrestaShop upload dir' ) )
+		     ->addTextField( 'XML file path', 'xml_location', true, $this->moduleInstance->l( 'File path relative to your PrestaShop install folder. eg "upload" is the PrestaShop upload dir', '', false, _PS_ROOT_DIR_.'/' ) )
 		     ->addTextField( 'XML file name', 'xml_fileName', true, $this->moduleInstance->l( 'File name. eg "skroutz.xml"' ) );
 
 		$options = array();
