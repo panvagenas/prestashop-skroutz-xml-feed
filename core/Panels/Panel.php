@@ -13,16 +13,17 @@ namespace XDaRk_v141110\Panels;
 
 use XDaRk_v141110\Core;
 
-if (!defined('_PS_VERSION_'))
+if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
+}
 
 
-class Panel extends Core
-{
+class Panel extends Core {
 	protected $tab = 0;
 	protected $type = 'main';
 	protected $title = 'XDaRk_v141110 Core Options Panel';
 	protected $image = false; // TODO set a default image
+	protected $desc = false;
 	protected $input = array();
 	protected $submit = array(
 		'title' => 'Save',
@@ -40,84 +41,81 @@ class Panel extends Core
 	 *
 	 * @param bool $prefix
 	 * @param bool $suffix
-	 *
+	 * @param int $col
 	 * @param string $type
 	 *
 	 * @return $this
-	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function addTextField($label, $name, $required = true, $hint = false, $class = '', $description = false, $prefix = false, $suffix = false, $type = 'text')
-	{
+	public function addTextField( $label, $name, $required = true, $hint = false, $class = '', $description = false, $prefix = false, $suffix = false, $col = 6, $type = 'text' ) {
 		$f = array(
 			'type'     => $type,
 			'label'    => $label,
 			'name'     => $name,
 			'class'    => $class,
 			'required' => $required,
+			'col'      => $col
 		);
-		if ($hint !== false)
+
+		if ( $hint !== false ) {
 			$f['hint'] = $hint;
+		}
 
-		if ($description !== false)
+		if ( $description !== false ) {
 			$f['description'] = $description;
+		}
 
-		if ($prefix !== false)
+		if ( $prefix !== false ) {
 			$f['prefix'] = $prefix;
+		}
 
-		if ($suffix !== false)
+		if ( $suffix !== false ) {
 			$f['suffix'] = $suffix;
+		}
 
-		$this->addField($f);
+		$this->addField( $f );
 
 		return $this;
 	}
 
-	public function addHiddenField($name)
-	{
+	public function addHiddenField( $name ) {
 		$f = array(
 			'type' => 'hidden',
 			'name' => $name,
 		);
-		$this->addField($f);
+		$this->addField( $f );
 
 		return $this;
 	}
 
-	public function addPasswordField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'password');
+	public function addPasswordField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'password' );
 	}
 
-	public function addFileField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
+	public function addFileField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
 		// TODO File options, check parent
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'datetime');
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'datetime' );
 	}
 
-	public function addDateField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
+	public function addDateField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
 		$class .= ' datepicker';
 
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'date');
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'date' );
 	}
 
-	public function addDateTimeField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
+	public function addDateTimeField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
 		$class .= ' datepicker';
 
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'datetime');
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'datetime' );
 	}
 
-	public function addTextAreaField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'textarea');
+	public function addTextAreaField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'textarea' );
 	}
 
-	public function addColorField($label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false)
-	{
-		return $this->addTextField($label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'color');
+	public function addColorField( $label, $name, $class = '', $required = true, $hint = false, $description = false, $prefix = false, $suffix = false ) {
+		return $this->addTextField( $label, $name, $required, $hint, $class, $description, $prefix, $suffix, 'color' );
 	}
 
 	/**
@@ -139,8 +137,7 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function addSelectField($label, $name, Array $options, $required = true, $hint = false, $class = '', $description = false, $optionId = 'value', $optionName = 'name', $prefix = false, $suffix = false)
-	{
+	public function addSelectField( $label, $name, Array $options, $required = true, $hint = false, $class = '', $description = false, $optionId = 'value', $optionName = 'name', $prefix = false, $suffix = false ) {
 		$f = array(
 			'type'     => 'select',
 			'label'    => $label,
@@ -153,19 +150,19 @@ class Panel extends Core
 				'name'  => $optionName
 			)
 		);
-		if ($hint !== false) {
+		if ( $hint !== false ) {
 			$f['hint'] = $hint;
 		}
-		if ($description !== false) {
+		if ( $description !== false ) {
 			$f['description'] = $description;
 		}
-		if ($prefix !== false) {
+		if ( $prefix !== false ) {
 			$f['prefix'] = $prefix;
 		}
-		if ($suffix !== false) {
+		if ( $suffix !== false ) {
 			$f['suffix'] = $suffix;
 		}
-		$this->addField($f);
+		$this->addField( $f );
 
 		return $this;
 	}
@@ -189,12 +186,11 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function addMultiSelectField($label, $name, Array $options, $required = false, $hint = false, $class = '', $description = false, $optionValueName = 'value', $optionName = 'name', $prefix = false, $suffix = false)
-	{
+	public function addMultiSelectField( $label, $name, Array $options, $required = false, $hint = false, $class = '', $description = false, $optionValueName = 'value', $optionName = 'name', $prefix = false, $suffix = false ) {
 		$f = array(
 			'type'     => 'select',
 			'label'    => $label,
-			'name'     => $name.'[]',
+			'name'     => $name . '[]',
 			'class'    => $class,
 			'required' => $required,
 			'multiple' => true,
@@ -204,19 +200,19 @@ class Panel extends Core
 				'name'  => $optionName
 			)
 		);
-		if ($hint !== false) {
+		if ( $hint !== false ) {
 			$f['hint'] = $hint;
 		}
-		if ($description !== false) {
+		if ( $description !== false ) {
 			$f['description'] = $description;
 		}
-		if ($prefix !== false) {
+		if ( $prefix !== false ) {
 			$f['prefix'] = $prefix;
 		}
-		if ($suffix !== false) {
+		if ( $suffix !== false ) {
 			$f['suffix'] = $suffix;
 		}
-		$this->addField($f);
+		$this->addField( $f );
 
 		return $this;
 	}
@@ -260,19 +256,23 @@ class Panel extends Core
 			'is_bool'  => $isBool,
 			'values'   => $values
 		);
-		if ($hint !== false)
+		if ( $hint !== false ) {
 			$f['hint'] = $hint;
+		}
 
-		if ($description !== false)
+		if ( $description !== false ) {
 			$f['description'] = $description;
+		}
 
-		if ($prefix !== false)
+		if ( $prefix !== false ) {
 			$f['prefix'] = $prefix;
+		}
 
-		if ($suffix !== false)
+		if ( $suffix !== false ) {
 			$f['suffix'] = $suffix;
+		}
 
-		$this->addField($f);
+		$this->addField( $f );
 
 		return $this;
 	}
@@ -286,20 +286,42 @@ class Panel extends Core
 		$description = false,
 		$prefix = false,
 		$suffix = false
-	){
+	) {
 		$yesNo = array(
 			array(
-				'id'    => $name.'_on',
+				'id'    => $name . '_on',
 				'value' => 1,
 				'label' => $this->moduleInstance->l( 'Yes' )
 			),
 			array(
-				'id'    => $name.'_off',
+				'id'    => $name . '_off',
 				'value' => 0,
 				'label' => $this->moduleInstance->l( 'No' )
 			)
 		);
-		return $this->addSwitchField($label, $name, $yesNo, $required, true, $hint, $class, $description, $prefix, $suffix);
+
+		return $this->addSwitchField( $label, $name, $yesNo, $required, true, $hint, $class, $description, $prefix, $suffix );
+	}
+
+	/**
+	 * @param $html_content
+	 * @param string $name
+	 *
+	 * @return $this
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since TODO ${VERSION}
+	 */
+	public function addHtml( $html_content, $name = '' ) {
+		$f = array(
+			'type'         => 'html',
+			'name'         => $name,
+			'html_content' => $html_content,
+			'col'          => 12,
+		);
+
+		$this->addField( $f );
+
+		return $this;
 	}
 
 
@@ -311,9 +333,8 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	protected function isMultiSelectField($field)
-	{
-		return is_array($field) && isset($field['multiple']) && $field['multiple'] === true;
+	protected function isMultiSelectField( $field ) {
+		return is_array( $field ) && isset( $field['multiple'] ) && $field['multiple'] === true;
 	}
 
 
@@ -325,12 +346,11 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function addField($field)
-	{
-		if (!isset($this->input) || !is_array($this->input)) {
+	public function addField( $field ) {
+		if ( ! isset( $this->input ) || ! is_array( $this->input ) ) {
 			$this->input = array();
 		}
-		array_push($this->input, $field);
+		array_push( $this->input, $field );
 
 		return $this;
 	}
@@ -348,21 +368,20 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function factory($index, $title, $image, $type = 'main', $submitTitle = 'Save', $submitClass = 'button pull-right')
-	{
-		$panel = new self($this->moduleInstance);
-		$panel->setTab($index);
-		$panel->setTitle($title);
+	public function factory( $index, $title, $image, $type = 'main', $submitTitle = 'Save', $submitClass = 'button pull-right' ) {
+		$panel = new self( $this->moduleInstance );
+		$panel->setTab( $index );
+		$panel->setTitle( $title );
 		$this->title = $title;
-		if ($image) {
-			$panel->setImage($image);
+		if ( $image ) {
+			$panel->setImage( $image );
 		}
-		$panel->setSubmit(array(
+		$panel->setSubmit( array(
 			'title' => $submitTitle,
 			'class' => $submitClass
-		));
+		) );
 
-		$panel->setType($type);
+		$panel->setType( $type );
 
 		return $panel;
 	}
@@ -373,19 +392,21 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public function __toArray()
-	{
+	public function __toArray() {
 		$ar = array();
-		if (!empty($this->title)) {
+		if ( ! empty( $this->title ) ) {
 			$ar['form']['legend']['title'] = $this->title;
 		}
-		if (!empty($this->image)) {
+		if ( ! empty( $this->image ) ) {
 			$ar['form']['legend']['image'] = $this->image;
 		}
-		if (!empty($this->input)) {
+		if ( ! empty( $this->desc ) ) {
+			$ar['form']['description'] = $this->desc;
+		}
+		if ( ! empty( $this->input ) ) {
 			$ar['form']['input'] = $this->input;
 		}
-		if (!empty($this->submit)) {
+		if ( ! empty( $this->submit ) ) {
 			$ar['form']['submit'] = $this->submit;
 		}
 
@@ -399,13 +420,12 @@ class Panel extends Core
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function parseFieldsValues(Array $fieldValues)
-	{
+	public function parseFieldsValues( Array $fieldValues ) {
 		$ar = array();
-		foreach ((array) $this->input as $ki => $fi) {
-			if ($this->isMultiSelectField($fi) && isset($fieldValues[ rtrim($fi['name'], '[]') ])) {
-				$ar[ $fi['name'] ] = $fieldValues[ rtrim($fi['name'], '[]') ];
-			} elseif (isset($fieldValues[ $fi['name'] ])) {
+		foreach ( (array) $this->input as $ki => $fi ) {
+			if ( $this->isMultiSelectField( $fi ) && isset( $fieldValues[ rtrim( $fi['name'], '[]' ) ] ) ) {
+				$ar[ $fi['name'] ] = $fieldValues[ rtrim( $fi['name'], '[]' ) ];
+			} elseif ( isset( $fieldValues[ $fi['name'] ] ) ) {
 				$ar[ $fi['name'] ] = $fieldValues[ $fi['name'] ];
 			}
 		}
@@ -413,16 +433,14 @@ class Panel extends Core
 		return $ar;
 	}
 
-	public function isInSidebar()
-	{
+	public function isInSidebar() {
 		return $this->type === 'sidebar';
 	}
 
 	/**
 	 * @return boolean
 	 */
-	public function isImageSet()
-	{
+	public function isImageSet() {
 		return $this->image;
 	}
 
@@ -431,8 +449,7 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setImage($image)
-	{
+	public function setImage( $image ) {
 		$this->image = $image;
 
 		return $this;
@@ -441,8 +458,7 @@ class Panel extends Core
 	/**
 	 * @return array
 	 */
-	public function getInput()
-	{
+	public function getInput() {
 		return $this->input;
 	}
 
@@ -451,8 +467,7 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setInput($input)
-	{
+	public function setInput( $input ) {
 		$this->input = $input;
 
 		return $this;
@@ -461,8 +476,7 @@ class Panel extends Core
 	/**
 	 * @return int
 	 */
-	public function getTab()
-	{
+	public function getTab() {
 		return $this->tab;
 	}
 
@@ -471,8 +485,7 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setTab($tab)
-	{
+	public function setTab( $tab ) {
 		$this->tab = $tab;
 
 		return $this;
@@ -481,8 +494,7 @@ class Panel extends Core
 	/**
 	 * @return string
 	 */
-	public function getTitle()
-	{
+	public function getTitle() {
 		return $this->title;
 	}
 
@@ -491,8 +503,7 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setTitle($title)
-	{
+	public function setTitle( $title ) {
 		$this->title = $title;
 
 		return $this;
@@ -501,8 +512,7 @@ class Panel extends Core
 	/**
 	 * @return string
 	 */
-	public function getType()
-	{
+	public function getType() {
 		return $this->type;
 	}
 
@@ -511,8 +521,7 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setType($type)
-	{
+	public function setType( $type ) {
 		$this->type = $type;
 
 		return $this;
@@ -523,15 +532,13 @@ class Panel extends Core
 	 *
 	 * @return $this
 	 */
-	public function setSubmit(Array $submit)
-	{
+	public function setSubmit( Array $submit ) {
 		$this->submit = $submit;
 
 		return $this;
 	}
 
-	public function getSubmit()
-	{
+	public function getSubmit() {
 		return $this->submit;
 	}
 } 

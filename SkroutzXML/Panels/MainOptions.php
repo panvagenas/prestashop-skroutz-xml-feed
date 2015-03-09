@@ -28,6 +28,10 @@ class MainOptions extends Panel {
 	public function __construct( $moduleInstance ) {
 		parent::__construct( $moduleInstance );
 
+		$generateUrl = \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'index.php?' . $this->Options->getValue('request_var') . '=' . $this->Options->getValue('request_var_value');
+		$this->desc = $this->moduleInstance->l('Give the following URL to skroutz.gr: ')
+		              . '<a href="'.$generateUrl.'" target="_blank">'. $generateUrl . '</a>';
+
 		$this->addTextField( 'XML Generate Request Variable Name', 'request_var' )
 		     ->addTextField( 'XML Generate Request Variable Value', 'request_var_value' )
 		     ->addTextField( 'XML file path', 'xml_location', true, $this->moduleInstance->l( 'File path relative to your PrestaShop install folder. eg "upload" is the PrestaShop upload dir', '', false, _PS_ROOT_DIR_.'/' ) )

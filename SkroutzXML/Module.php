@@ -11,6 +11,7 @@
 
 namespace SkroutzXML;
 
+use SkroutzXML\Panels\Info;
 use SkroutzXML\Panels\MainOptions;
 use SkroutzXML\Panels\MapOptions;
 
@@ -83,6 +84,7 @@ class Module extends \XDaRk_v141110\Module{
 		return $this->Form
 			->registerPanel(new MainOptions($this))
 			->registerPanel(new MapOptions($this))
+			->registerPanel(new Info($this))
 			->initialize($this)
 			->generateForm($this->Options->getOptionsArray());
 	}
