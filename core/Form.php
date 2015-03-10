@@ -18,9 +18,9 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
-use XDaRk_v141110\Panels\Panel;
+use XDaRk_v150216\Panels\Panel;
 
 if (!defined('_PS_VERSION_'))
 	exit;

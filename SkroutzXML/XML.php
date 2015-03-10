@@ -11,7 +11,7 @@
 
 namespace SkroutzXML;
 
-class XML extends \XDaRk_v141110\XML{
+class XML extends \XDaRk_v150216\XML{
 	/**
 	 * @var array
 	 */

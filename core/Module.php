@@ -9,12 +9,12 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if (!class_exists('XDaRk_v141110\Module')) {
+if (!class_exists('XDaRk_v150216\Module')) {
 
 	/**
 	 * Class Module
@@ -22,14 +22,14 @@ if (!class_exists('XDaRk_v141110\Module')) {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 *
-	 * @property \XDaRk_v141110\Dir             Dir
-	 * @property \XDaRk_v141110\File            File
-	 * @property \XDaRk_v141110\Form            Form
-	 * @property \XDaRk_v141110\Hooks           Hooks
-	 * @property \XDaRk_v141110\Installer       Installer
-	 * @property \XDaRk_v141110\Options         Options
-	 * @property \XDaRk_v141110\XML             XML
-	 * @property \XDaRk_v141110\Exception       Exception
+	 * @property \XDaRk_v150216\Dir             Dir
+	 * @property \XDaRk_v150216\File            File
+	 * @property \XDaRk_v150216\Form            Form
+	 * @property \XDaRk_v150216\Hooks           Hooks
+	 * @property \XDaRk_v150216\Installer       Installer
+	 * @property \XDaRk_v150216\Options         Options
+	 * @property \XDaRk_v150216\XML             XML
+	 * @property \XDaRk_v150216\Exception       Exception
 	 */
 	abstract class Module extends \Module
 	{
@@ -48,7 +48,7 @@ if (!class_exists('XDaRk_v141110\Module')) {
 		/**
 		 * @var string
 		 */
-		public $version = '141110';
+		public $version = '150216';
 		/**
 		 * @var string
 		 */
@@ -68,7 +68,7 @@ if (!class_exists('XDaRk_v141110\Module')) {
 		/**
 		 * @var string
 		 */
-		public $displayName = 'XDaRk_v141110 Core Module';
+		public $displayName = 'XDaRk_v150216 Core Module';
 		/**
 		 * @var bool
 		 */
@@ -122,7 +122,7 @@ if (!class_exists('XDaRk_v141110\Module')) {
 			$this->loader->register();
 
 			// Register core namespace
-			$this->loader->addNamespace('\XDaRk_v141110', dirname(__FILE__));
+			$this->loader->addNamespace('\XDaRk_v150216', dirname(__FILE__));
 
 			$this->core              = Core::getInstance($this);
 			Core::$instanceNamespace = $GLOBALS[ $this->name ]['root_ns'];
@@ -171,6 +171,7 @@ if (!class_exists('XDaRk_v141110\Module')) {
 		 */
 		public final function getContent()
 		{
+
 			$output = '';
 
 			if (\Tools::isSubmit('submit'.$this->name)) {
@@ -182,7 +183,9 @@ if (!class_exists('XDaRk_v141110\Module')) {
 				}
 			}
 
-			return $output.$this->xdGetContent();
+			$extenders = $this->xdGetContent();
+
+			return empty($extenders) ? false : $output.$extenders;
 		}
 
 		/**

@@ -9,12 +9,12 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if(!class_exists('\XDaRk_v141110\AutoLoader')) {
+if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 	/**
 	 * A general-purpose implementation that includes the optional functionality
 	 * of allowing multiple base directories for a single namespace prefix.

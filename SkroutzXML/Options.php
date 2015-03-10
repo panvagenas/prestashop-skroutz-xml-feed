@@ -12,7 +12,7 @@
 namespace SkroutzXML;
 
 
-class Options extends \XDaRk_v141110\Options {
+class Options extends \XDaRk_v150216\Options {
 	/**
 	 * @var array Availability options for skroutz.gr
 	 */

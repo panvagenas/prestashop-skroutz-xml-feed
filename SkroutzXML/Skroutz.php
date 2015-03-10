@@ -12,7 +12,7 @@
 namespace SkroutzXML;
 
 
-use XDaRk_v141110\Core;
+use XDaRk_v150216\Core;
 
 /**
  * Class Skroutz

@@ -9,9 +9,9 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110\Panels;
+namespace XDaRk_v150216\Panels;
 
-use XDaRk_v141110\Core;
+use XDaRk_v150216\Core;
 
 if ( ! defined( '_PS_VERSION_' ) ) {
 	exit;
@@ -21,9 +21,10 @@ if ( ! defined( '_PS_VERSION_' ) ) {
 class Panel extends Core {
 	protected $tab = 0;
 	protected $type = 'main';
-	protected $title = 'XDaRk_v141110 Core Options Panel';
+	protected $title = 'XDaRk_v150216 Core Options Panel';
 	protected $image = false; // TODO set a default image
-	protected $desc = false;
+	protected $desc = null;
+	protected $description = null;
 	protected $input = array();
 	protected $submit = array(
 		'title' => 'Save',
@@ -45,6 +46,7 @@ class Panel extends Core {
 	 * @param string $type
 	 *
 	 * @return $this
+	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
@@ -401,7 +403,10 @@ class Panel extends Core {
 			$ar['form']['legend']['image'] = $this->image;
 		}
 		if ( ! empty( $this->desc ) ) {
-			$ar['form']['description'] = $this->desc;
+			$ar['form']['desc'] = $this->desc;
+		}
+		if ( ! empty( $this->description ) ) {
+			$ar['form']['description'] = $this->description;
 		}
 		if ( ! empty( $this->input ) ) {
 			$ar['form']['input'] = $this->input;

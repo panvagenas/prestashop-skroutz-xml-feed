@@ -9,7 +9,7 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -26,6 +26,6 @@ class Dir extends Core {
 	 */
 	public function n_seps() // Arguments are NOT listed here.
 	{
-		return call_user_func_array(array('\\XDaRk_v141110\Stub', 'n_dir_seps'), func_get_args());
+		return call_user_func_array(array('\\XDaRk_v150216\Stub', 'n_dir_seps'), func_get_args());
 	}
 }

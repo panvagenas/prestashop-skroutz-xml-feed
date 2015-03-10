@@ -9,7 +9,7 @@
  * Copyright: 2014 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
 if (!defined('_PS_VERSION_'))
 	exit;
@@ -23,8 +23,8 @@ if (!defined('_PS_VERSION_'))
  */
 interface Constants
 {
-	const  __CORE_NS__ = 'XDaRk_v141110';
-	const __CORE_VERSION__ = 141110;
+	const  __CORE_NS__ = 'XDaRk_v150216';
+	const __CORE_VERSION__ = 150216;
 
 	# -----------------------------------------------------------------------------------------------------------------------------
 	# URL parts/components bitmask for XDaRk Core.

@@ -5,11 +5,11 @@
  * User: Panagiotis Vagenas <pan.vagenas@gmail.com>
  * Date: 13/2/2015
  * Time: 9:45 μμ
- * Since: TODO ${VERSION}
+ * Since: 150216
  * Copyright: 2015 Panagiotis Vagenas
  */
 
-namespace XDaRk_v141110;
+namespace XDaRk_v150216;
 
 
 class Stub {

@@ -12,7 +12,7 @@
 namespace SkroutzXML\Panels;
 
 
-use XDaRk_v141110\Panels\Panel;
+use XDaRk_v150216\Panels\Panel;
 
 class MapOptions extends Panel {
 	protected $tab = 0;

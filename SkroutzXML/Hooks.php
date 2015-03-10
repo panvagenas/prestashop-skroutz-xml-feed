@@ -20,7 +20,7 @@ namespace SkroutzXML;
  * @property \SkroutzXML\Skroutz    Skroutz
  * @property \SkroutzXML\XML        XML
  */
-class Hooks extends \XDaRk_v141110\Hooks{
+class Hooks extends \XDaRk_v150216\Hooks{
 	/**
 	 * @param $p
 	 *
