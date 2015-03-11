@@ -35,7 +35,7 @@ class Info extends Panel{
 			<?php
 		foreach ( $this->XML->getFileInfo() as $k => $v ) {
 			?>
-			<li class="list-group-item"><?php echo $k . ': <strong>' . $v . '</strong>'; ?></li>
+			<li class="list-group-item"><?php echo $v['label'] . ': <strong>' . $v['value'] . '</strong>'; ?></li>
 			<?php
 		}
 		?>

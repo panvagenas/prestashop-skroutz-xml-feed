@@ -40,7 +40,7 @@ class Module extends \XDaRk_v150216\Module{
 	/**
 	 * @var string
 	 */
-	public $author = 'Panagiotis Vagenas <pan.vagenas@gmail.com>';
+	public $author = '<a href="http://erp.xdark.eu">Panagiotis Vagenas</a>';
 	/**
 	 * @var int
 	 */

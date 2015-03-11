@@ -55,7 +55,7 @@ class Skroutz extends Core {
 	public function printXMLFile() {
 		$interval         = $this->getGenerationInterval();
 		$xmlCreation      = $this->XML->getFileInfo();
-		$createdTime      = strtotime( $xmlCreation['File Creation Datetime'] );
+		$createdTime      = strtotime( $xmlCreation[$this->XML->createdAtName]['value'] );
 		$nextCreationTime = $interval + $createdTime;
 		$time             = time();
 		if ( $time > $nextCreationTime ) {

@@ -282,22 +282,37 @@ class XML extends \XDaRk_v150216\XML{
 	public function getFileInfo() {
 		$fileLocation = $this->getFileLocation();
 
+		$info = array();
 		if ( $this->existsAndReadable( $fileLocation ) ) {
-			$info = array();
 
 			$sXML = simplexml_load_file( $fileLocation );
-			$cratedAtName = $this->createdAtName;
+			if($sXML){
+				$cratedAtName = $this->createdAtName;
+				$info[ $this->createdAtName ] = array(
+					'value' => end( $sXML->$cratedAtName ),
+					'label' => 'Cached File Creation Datetime'
+				);
+				$info['cachedFilePath']       = array( 'value' => $fileLocation, 'label' => 'Cached File Path' );
 
-			$info[ 'File Creation Datetime' ] = end( $sXML->$cratedAtName );
-			$info['Products Count']       = $this->countProductsInFile( $sXML );
-			$info['File Path']            = $fileLocation;
-//			$info['File Url']             = $this->©url->to_wp_site_uri( str_replace( ABSPATH, '', $fileLocation ) ); TODO File URL
-			$info['File Size']            = filesize( $fileLocation );
-
-			return $info;
+				$info['url']                  = array(
+					'value' => \Tools::getHttpHost(true).__PS_BASE_URI__ . trim(str_replace(_PS_ROOT_DIR_, '', $fileLocation), '/'),
+					'label' => 'File Url'
+				);
+				$info['size']                 = array( 'value' => filesize( $fileLocation ), 'label' => 'Cached File Size' );
+			}
 		} else {
-			return null;
+			$info[ $this->createdAtName ] = array(
+				'value' => 'no data',
+				'label' => 'Cached File Creation Datetime'
+			);
+			$info['cachedFilePath']       = array( 'value' => 'no data', 'label' => 'Cached File Path' );
+			$info['url']                  = array(
+				'value' => 'no data',
+				'label' => 'File Url'
+			);
+			$info['size']                 = array( 'value' => 'no data', 'label' => 'Cached File Size' );
 		}
+		return $info;
 	}
 
 	/**
