@@ -73,7 +73,7 @@ class Skroutz extends Core {
 	 * @since 150213
 	 */
 	public function createProductsArray() {
-		$products = \Product::getProducts( $this->defaultLang, 0, 0, 'id_product', 'ASC', false, $this->Options->getValue( 'include_disabled' ) );
+		$products = \Product::getProducts( $this->defaultLang, 0, 0, 'id_product', 'ASC', false, !(bool)$this->Options->getValue( 'include_disabled' ) );
 
 		$backOrdersInclude = $this->Options->getValue( 'avail_backorders' ) > 0;
 		$outOfStockInclude = $this->Options->getValue( 'avail_outOfStock' ) > 0;
@@ -82,6 +82,12 @@ class Skroutz extends Core {
 			$p = new \Product( $product['id_product'] );
 
 			// TODO Check for product avail etc
+
+			if($p->condition == 'used'){
+				unset( $products[ $key ] );
+				// TODO Log skipped product
+				continue;
+			}
 
 			$hasStock = $p->getRealQuantity($p->id) > 0; // TODO Is this a convenient way?
 
@@ -280,13 +286,15 @@ class Skroutz extends Core {
 
 	/**
 	 * @param \Product $product
+	 * @param bool $ids
 	 *
 	 * @return string
 	 * @throws \Exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductCategories( \Product &$product ) {
+	protected function getProductCategories( \Product &$product, $ids = false ) {
+		$maxDepth = 13; // TODO Implement in options or remove
 		$categories = array();
 		if ( $this->Options->getValue( 'map_category' ) == 1 ) {
 			$info = \Tag::getProductTags( $product->id );
@@ -294,21 +302,22 @@ class Skroutz extends Core {
 				$categories = (array) $info[ $this->defaultLang ];
 			}
 		} else {
-			$info = \Category::getCategoryInformations( $product->getCategories() );
-			if ( ! is_array( $info ) || empty( $info ) ) {
-				return '';
+			$defaultCat = $product->getDefaultCategory();
+			if($ids){
+				return $defaultCat;
 			}
-			foreach ( (array) $info as $cat ) {
-				// Todo is there a better way to check for home category?
-				if ( $cat['id_category'] == 2 ) {
-					continue;
-				}
-				array_push( $categories, $cat['name'] );
-			}
+			$category = new \Category($defaultCat);
 
+			do{
+				array_push( $categories, $ids ? $category->id : $category->name[$this->defaultLang] );
+				$category = new \Category($category->id_parent);
+			}while($category->id_parent && !$category->is_root_category);
+
+			$categories = array_reverse($categories);
 		}
 
-		return implode( ' - ', (array) $categories );
+
+		return is_array( $categories ) ? implode( ' - ',  $categories)  : $categories;
 	}
 
 	/**
