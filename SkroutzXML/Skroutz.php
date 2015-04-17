@@ -49,16 +49,19 @@ class Skroutz extends Core {
 	}
 
 	/**
+	 *
+	 * @param bool $forceGeneration
+	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function printXMLFile() {
+	public function printXMLFile($forceGeneration = false) {
 		$interval         = $this->getGenerationInterval();
 		$xmlCreation      = $this->XML->getFileInfo();
 		$createdTime      = strtotime( $xmlCreation[$this->XML->createdAtName]['value'] );
 		$nextCreationTime = $interval + $createdTime;
 		$time             = time();
-		if ( $time > $nextCreationTime ) {
+		if ( $time > $nextCreationTime || $forceGeneration) {
 			$this->generateXMLFile();
 		}
 
@@ -567,5 +570,9 @@ class Skroutz extends Core {
 	 */
 	protected function getGenerationInterval() {
 		return 86400;
+	}
+
+	public function getGenerateURL(){
+		return \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'index.php?' . $this->Options->getValue('request_var') . '=' . $this->Options->getValue('request_var_value');
 	}
 }

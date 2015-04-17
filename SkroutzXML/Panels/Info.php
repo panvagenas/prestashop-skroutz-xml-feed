@@ -12,8 +12,17 @@
 namespace SkroutzXML\Panels;
 
 
+use SkroutzXML\Skroutz;
 use XDaRk_v150216\Panels\Panel;
 
+/**
+ * Class Info
+ * @package SkroutzXML\Panels
+ * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+ * @since TODO ${VERSION}
+ *
+ * @property Skroutz $Skroutz
+ */
 class Info extends Panel{
 	protected $tab = 0;
 	protected $type = 'sidebar';
@@ -40,6 +49,23 @@ class Info extends Panel{
 		}
 		?>
 		</ul>
+		<button id="gen-xml-now" class="btn btn-large btn-primary col-md-12"><?php echo $this->l('Generate XML Now'); ?></button>
+		<script type="text/javascript">
+			jQuery(document).ready(function($){
+				$('#gen-xml-now').click(function(e){
+					e.preventDefault();
+					$.get(
+						'<?php echo $this->Skroutz->getGenerateURL(); ?>&force_new=1',
+						'',
+						function(response){
+							alert('Done! Products in XML: '+response.firstChild.children[0].childElementCount);
+							window.location.reload();
+						},
+						'xml'
+					);
+				});
+			});
+		</script>
 		<?php
 		return ob_get_clean();
 	}
