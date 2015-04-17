@@ -569,7 +569,8 @@ class Skroutz extends Core {
 	 * @since 150213
 	 */
 	protected function getGenerationInterval() {
-		return 86400;
+		$interval = (float)$this->Options->getValue('xml_interval');
+		return (int)ceil($interval*3600);
 	}
 
 	public function getGenerateURL(){

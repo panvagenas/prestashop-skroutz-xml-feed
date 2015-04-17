@@ -25,8 +25,6 @@ class Options extends \XDaRk_v150216\Options {
 		'Pre-order'
 	);
 
-	public $xmlIntervalOptions = array( 'daily' );
-
 	/**
 	 *
 	 *
@@ -51,7 +49,7 @@ class Options extends \XDaRk_v150216\Options {
 			// File name
 			'xml_fileName'        => 'skroutz.xml',
 			// Generation interval
-			'xml_interval'        => 'daily',
+			'xml_interval'        => '83600',
 			/*********************
 			 * Products relative
 			 ********************/
@@ -105,7 +103,7 @@ class Options extends \XDaRk_v150216\Options {
 			// File name
 			'xml_fileName'        => array( 'string:!empty' ),
 			// Generation interval
-			'xml_interval'        => array( 'string:in_array' => $this->xmlIntervalOptions ),
+			'xml_interval'        => array( 'string:numeric >=' => 0.001),
 			/*********************
 			 * Products relative
 			 ********************/
