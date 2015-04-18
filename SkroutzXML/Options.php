@@ -49,7 +49,7 @@ class Options extends \XDaRk_v150216\Options {
 			// File name
 			'xml_fileName'        => 'skroutz.xml',
 			// Generation interval
-			'xml_interval'        => '83600',
+			'xml_interval'        => '6',
 			/*********************
 			 * Products relative
 			 ********************/
