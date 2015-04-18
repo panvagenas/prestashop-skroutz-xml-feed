@@ -55,10 +55,23 @@ class Hooks extends Core {
 		return $result;
 	}
 
+	/**
+	 * @param $name
+	 *
+	 * @return int
+	 * @static * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 141110
+	 */
 	public static function isHookFunction($name) {
 		return preg_match(Core::$__REGEX_HOOK_FUNCTION, $name);
 	}
 
+	/**
+	 * @param \Module $module
+	 *
+	 * @static * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since 141110
+	 */
 	public static function removeAllHooksFromModule(\Module &$module) {
 		foreach (\Hook::getHooks() as $k => $hook) {
 			$module->unregisterHook((int) $hook['id_hook']);

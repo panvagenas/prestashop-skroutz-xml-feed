@@ -43,6 +43,7 @@ if ( ! class_exists( 'XDaRk_v150216\Core' ) ) {
 	 * @property \XDaRk_v150216\Vars            Vars
 	 * @property \XDaRk_v150216\Url             Url
 	 * @property \XDaRk_v150216\Integer         Integer
+	 * @property \XDaRk_v150216\EDD             EDD
 	 */
 	class Core implements Constants {
 		public static $singletonClasses = array();
@@ -60,6 +61,9 @@ if ( ! class_exists( 'XDaRk_v150216\Core' ) ) {
 		public static $__REGEX_MATCH_PHP_FILES = '/^.+\.php$/i';
 		public static $__REGEX_HOOK_FUNCTION = '/^(hook)+.+$/';
 
+		/**
+		 * @var Module
+		 */
 		public $moduleInstance;
 		public $instanceNamespaceClass;
 
@@ -155,6 +159,8 @@ if ( ! class_exists( 'XDaRk_v150216\Core' ) ) {
 		/**
 		 * Protected constructor to prevent creating a new instance of the
 		 * *Singleton* via the `new` operator from outside of this class.
+		 *
+		 * @param \Module $moduleInstance
 		 */
 		protected function __construct( \Module &$moduleInstance ) {
 			$this->instanceNamespaceClass = get_class( $this );
@@ -338,7 +344,7 @@ if ( ! class_exists( 'XDaRk_v150216\Core' ) ) {
 					$this->method( __FUNCTION__ ) . '#args_missing', get_defined_vars(),
 					sprintf( $this->moduleInstance->l( 'Missing required argument(s); `%1$s` requires `%2$s`, `%3$s` given.' ),
 						$this->Method->get_backtrace_callers( debug_backtrace(), 'last' ), $required_args, $total_args ) .
-					' ' . sprintf( $this->moduleInstance->l( 'Got: `%1$s`.' ), $this->©var->dump( $args ) ) );
+					' ' . sprintf( $this->moduleInstance->l( 'Got: `%1$s`.' ), $this->Vars->dump( $args ) ) );
 			}
 
 			if ( $total_args === 0 ) {
@@ -552,7 +558,7 @@ if ( ! class_exists( 'XDaRk_v150216\Core' ) ) {
 					$this->method( __FUNCTION__ ) . '#invalid_args', get_defined_vars(),
 					sprintf( $this->moduleInstance->l( 'Argument #%1$s passed to `%2$s` requires `%3$s`, %4$s`%5$s` given.' ),
 						$position, $this->Method->get_backtrace_callers( debug_backtrace(), 'last' ), $types, $empty, $type_given ) .
-					' ' . sprintf( $this->moduleInstance->l( 'Got: `%1$s`.' ), $this->©var->dump( $args ) ) );
+					' ' . sprintf( $this->moduleInstance->l( 'Got: `%1$s`.' ), $this->Vars->dump( $args ) ) );
 			}
 
 			return true; // Default return value (no problem).

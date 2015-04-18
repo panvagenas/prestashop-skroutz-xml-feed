@@ -225,4 +225,15 @@ class Vars extends Core{
 	public function getQueryVars(){
 		return $this->Vars->parse_raw_query($this->Vars->_SERVER('QUERY_STRING'));
 	}
+
+	/**
+	 * @param $data
+	 *
+	 * @return mixed
+	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
+	 * @since TODO ${VERSION}
+	 */
+	public function dump($data){
+		return print_r($data, true);
+	}
 } 

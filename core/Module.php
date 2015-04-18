@@ -22,6 +22,7 @@ if (!class_exists('XDaRk_v150216\Module')) {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 *
+	 * @property \XDaRk_v150216\Module          Module
 	 * @property \XDaRk_v150216\Dir             Dir
 	 * @property \XDaRk_v150216\File            File
 	 * @property \XDaRk_v150216\Form            Form
@@ -30,6 +31,12 @@ if (!class_exists('XDaRk_v150216\Module')) {
 	 * @property \XDaRk_v150216\Options         Options
 	 * @property \XDaRk_v150216\XML             XML
 	 * @property \XDaRk_v150216\Exception       Exception
+	 * @property \XDaRk_v150216\Method          Method
+	 * @property \XDaRk_v150216\String          String
+	 * @property \XDaRk_v150216\Vars            Vars
+	 * @property \XDaRk_v150216\Url             Url
+	 * @property \XDaRk_v150216\Integer         Integer
+	 * @property \XDaRk_v150216\EDD             EDD
 	 */
 	abstract class Module extends \Module
 	{

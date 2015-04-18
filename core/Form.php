@@ -116,7 +116,7 @@ class Form extends \HelperFormCore
 	}
 
 	/**
-	 * @param $module
+	 * @param Module $module
 	 * @param bool $bootstrap
 	 * @param bool $title
 	 * @param bool $showToolbar

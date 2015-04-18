@@ -33,6 +33,20 @@ class String extends Core{
 	}
 
 	/**
+	 * Should a variable be interpreted as TRUE?
+	 *
+	 * @param mixed $var Any value to test against here.
+	 *
+	 * @return boolean TRUE for: TRUE, 'TRUE', 'true', 1, '1', 'on', 'ON', 'yes', 'YES' — else FALSE.
+	 *    Any resource/object/array is of course NOT one of these values, and will always return FALSE.
+	 *    In other words, any value that is NOT scalar, is NOT TRUE.
+	 */
+	public function is_true($var)
+	{
+		return is_scalar($var) && filter_var($var, FILTER_VALIDATE_BOOLEAN);
+	}
+
+	/**
 	 * Short version of `(isset() && is_string())`.
 	 *
 	 * @note Unlike PHP's `is_...` functions, this will NOT throw a NOTICE.
@@ -180,5 +194,53 @@ class String extends Core{
 			$random_str .= (string)substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 
 		return $random_str;
+	}
+
+	/**
+	 * Check if string values are NOT empty.
+	 *
+	 * @note Unlike PHP's `is_...` functions, this will NOT throw a NOTICE.
+	 *
+	 * @note Max 26 arguments by reference. If vars are/were NOT already set,
+	 *    they will be set to NULL by PHP, as a result of passing them by reference.
+	 *    Starting with argument #27, vars cannot be passed by reference.
+	 *
+	 * @param mixed $a
+	 * @param mixed $b
+	 * @param mixed $c
+	 * @param mixed $d
+	 * @param mixed $e
+	 * @param mixed $f
+	 * @param mixed $g
+	 * @param mixed $h
+	 * @param mixed $i
+	 * @param mixed $j
+	 * @param mixed $k
+	 * @param mixed $l
+	 * @param mixed $m
+	 * @param mixed $n
+	 * @param mixed $o
+	 * @param mixed $p
+	 * @param mixed $q
+	 * @param mixed $r
+	 * @param mixed $s
+	 * @param mixed $t
+	 * @param mixed $u
+	 * @param mixed $v
+	 * @param mixed $w
+	 * @param mixed $x
+	 * @param mixed $y
+	 * @param mixed $z
+	 * @params-variable-length
+	 *
+	 * @return boolean TRUE if all arguments are strings, and they're NOT empty.
+	 */
+	public function are_not_empty(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	{
+		foreach(func_get_args() as $_arg)
+			if(empty($_arg) || !is_string($_arg))
+				return FALSE;
+
+		return TRUE;
 	}
 } 

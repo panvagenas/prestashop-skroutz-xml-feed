@@ -14,6 +14,9 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
+/**
+ * @property null reconsider
+ */
 class Method extends Core{
 	/**
 	 * PHP's language constructs.
@@ -99,7 +102,7 @@ class Method extends Core{
 			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], preg_split('/[\s;,]+/', $_ini_val, NULL, PREG_SPLIT_NO_EMPTY));
 		unset($_ini_val); // Housekeeping.
 
-		if($this->©string->is_true(ini_get('suhosin.executor.disable_eval')))
+		if($this->String->is_true(ini_get('suhosin.executor.disable_eval')))
 			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], array('eval'));
 
 		return $this->static[__FUNCTION__];
@@ -138,10 +141,10 @@ class Method extends Core{
 		foreach($debug_backtrace as $_caller) // Compile callers.
 		{
 			if(!is_array($_caller)) continue;
-			if(!$this->©string->is_not_empty($_caller['function'])) continue;
+			if(!$this->String->is_not_empty($_caller['function'])) continue;
 			if(in_array(strtolower($_caller['function']), $exclusions)) continue;
 
-			if($this->©strings->are_not_empty($_caller['class'], $_caller['type']))
+			if($this->String->are_not_empty($_caller['class'], $_caller['type']))
 				$callers[] = $_caller['class'].$_caller['type'].$_caller['function'];
 			else $callers[] = $_caller['function'];
 		}

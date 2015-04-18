@@ -793,7 +793,7 @@ class Arrays extends Core{
 	{
 		$this->check_arg_types('array', 'boolean', func_get_args());
 
-		$js = $this->©var->to_js($array); // Produces a JavaScript array `[]` or object `{}`.
+		$js = $this->Vars->to_js($array); // Produces a JavaScript array `[]` or object `{}`.
 
 		return !$encapsulate ? ltrim(rtrim($js, '}]'), '{[') : $js;
 	}
