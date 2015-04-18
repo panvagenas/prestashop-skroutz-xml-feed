@@ -105,11 +105,15 @@ class Skroutz extends Core {
 
 			if(!$hasStock ){
 				// TODO backOrdersAllowed not working as expected
-				if($p->getRealQuantity($p->id) == 0 && !$outOfStockInclude){
+				$quantity = $p->getRealQuantity($p->id);
+				if($quantity == 0 && !$outOfStockInclude && !$backOrdersInclude){
 					unset( $products[ $key ] );
 					// TODO Log skipped product
 					continue;
-				} else if($p->getRealQuantity($p->id) < 0 && (!$backOrdersInclude || !$this->backOrdersAllowed($p))){ // quantity < 0
+				}
+
+				$backOrdersAllowed = $this->backOrdersAllowed($p);
+				if($quantity < 0 && (!$backOrdersInclude || !$backOrdersAllowed)){ // quantity < 0
 					unset( $products[ $key ] );
 					// TODO Log skipped product
 					continue;
@@ -529,7 +533,8 @@ class Skroutz extends Core {
 	 * @since 150213
 	 */
 	protected function backOrdersAllowed( \Product $product ) {
-		return \Product::isAvailableWhenOutOfStock( $product->out_of_stock ) == 1;
+		$is = \Product::isAvailableWhenOutOfStock( $product->out_of_stock );
+		return $is == 1;
 	}
 
 	/**
