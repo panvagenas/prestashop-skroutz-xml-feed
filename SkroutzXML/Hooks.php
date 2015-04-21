@@ -30,7 +30,8 @@ class Hooks extends \XDaRk_v150216\Hooks{
 	 */
 	public function hookDisplayHeader( $p ) {
 		$queryVars = $this->Vars->getQueryVars();
-		if(isset($queryVars[$this->Options->getValue('request_var')]) && $queryVars[$this->Options->getValue('request_var')] === $this->Options->getValue('request_var_value')){
+		if(isset($queryVars[$this->Options->getValue('request_var')])
+		   && $queryVars[$this->Options->getValue('request_var')] === $this->Options->getValue('request_var_value')){
 			$this->Skroutz->printXMLFile(isset($queryVars['force_new']));
 		}
 	}

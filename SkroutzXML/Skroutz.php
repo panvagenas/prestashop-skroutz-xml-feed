@@ -579,6 +579,6 @@ class Skroutz extends Core {
 	}
 
 	public function getGenerateURL(){
-		return \Tools::getHttpHost() . __PS_BASE_URI__ . 'index.php?' . $this->Options->getValue('request_var') . '=' . $this->Options->getValue('request_var_value');
+		return \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'index.php?' . $this->Options->getValue('request_var') . '=' . $this->Options->getValue('request_var_value');
 	}
 }
