@@ -20,5 +20,6 @@ if (!defined('_PS_VERSION_'))
  * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
  * @since 141110
  */
-class XML extends Core {
+class XML extends Core
+{
 } 

@@ -23,7 +23,8 @@ use XDaRk_v150216\Panels\Panel;
  *
  * @property Skroutz $Skroutz
  */
-class Info extends Panel{
+class Info extends Panel
+{
 	protected $tab = 0;
 	protected $type = 'sidebar';
 	protected $title = 'Info';
@@ -31,34 +32,38 @@ class Info extends Panel{
 	protected $input = array();
 	protected $submit = array();
 
-	public function __construct( $moduleInstance ) {
-		parent::__construct( $moduleInstance );
+	public function __construct($moduleInstance)
+	{
+		parent::__construct($moduleInstance);
 
 		$this->addHtml($this->infoContent());
 	}
 
-	protected function infoContent(){
+	protected function infoContent()
+	{
 		ob_start();
 		?>
 		<ul class="list-group">
 			<?php
-		foreach ( $this->XML->getFileInfo() as $k => $v ) {
-			?>
-			<li class="list-group-item"><?php echo $v['label'] . ': <strong>' . $v['value'] . '</strong>'; ?></li>
+			foreach ($this->XML->getFileInfo() as $k => $v)
+			{
+				?>
+				<li class="list-group-item"><?php echo $v['label'].': <strong>'.$v['value'].'</strong>'; ?></li>
 			<?php
-		}
-		?>
+			}
+			?>
 		</ul>
-		<button id="gen-xml-now" class="btn btn-large btn-primary col-md-12"><?php echo $this->l('Generate XML Now'); ?></button>
+		<button id="gen-xml-now"
+		        class="btn btn-large btn-primary col-md-12"><?php echo $this->l('Generate XML Now'); ?></button>
 		<script type="text/javascript">
-			jQuery(document).ready(function($){
-				$('#gen-xml-now').click(function(e){
+			jQuery(document).ready(function ($) {
+				$('#gen-xml-now').click(function (e) {
 					e.preventDefault();
 					$.get(
 						'<?php echo $this->Skroutz->getGenerateURL(); ?>&force_new=1',
 						'',
-						function(response){
-							alert('Done! Products in XML: '+response.firstChild.children[0].childElementCount);
+						function (response) {
+							alert('Done! Products in XML: ' + response.firstChild.children[0].childElementCount);
 							window.location.reload();
 						},
 						'xml'

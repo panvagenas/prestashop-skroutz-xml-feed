@@ -15,12 +15,13 @@ use SkroutzXML\Panels\Info;
 use SkroutzXML\Panels\MainOptions;
 use SkroutzXML\Panels\MapOptions;
 
-if ( ! defined( '_PS_VERSION_' ) ) {
+if (!defined('_PS_VERSION_'))
 	exit;
-}
-require_once dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR . 'Core.php';
 
-class Module extends \XDaRk_v150216\Module{
+require_once dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'Core.php';
+
+class Module extends \XDaRk_v150216\Module
+{
 	/**
 	 * @var string Name of this plugin
 	 */
@@ -48,7 +49,7 @@ class Module extends \XDaRk_v150216\Module{
 	/**
 	 * @var array
 	 */
-	public $ps_versions_compliancy = array( 'min' => '1.5' );
+	public $ps_versions_compliancy = array('min' => '1.5');
 	/**
 	 * @var array
 	 */
@@ -70,7 +71,8 @@ class Module extends \XDaRk_v150216\Module{
 		parent::__construct();
 
 		$requestVarValue = $this->Options->getValue('request_var_value');
-		if(empty($requestVarValue)){
+		if (empty($requestVarValue))
+		{
 			$this->Options->saveOptions(array('request_var_value' => uniqid().uniqid()));
 		}
 	}
@@ -80,7 +82,8 @@ class Module extends \XDaRk_v150216\Module{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150202
 	 */
-	protected function xdGetContent() {
+	protected function xdGetContent()
+	{
 		return $this->Form
 			->registerPanel(new MainOptions($this))
 			->registerPanel(new MapOptions($this))
@@ -89,11 +92,12 @@ class Module extends \XDaRk_v150216\Module{
 			->generateForm($this->Options->getOptionsArray());
 	}
 }
+
 /***********************************************
-* Init core module specs
-***********************************************/
+ * Init core module specs
+ ***********************************************/
 $GLOBALS['skroutzxmlfeed'] = array(
 	'root_ns' => __NAMESPACE__,
 	'var_ns'  => 'skz',
-	'dir'     => dirname( dirname( __FILE__ ) )
+	'dir'     => dirname(dirname(__FILE__))
 );

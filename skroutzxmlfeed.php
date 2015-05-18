@@ -11,7 +11,8 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'SkroutzXML' . DIRECTORY_SEPARATOR . 'Module.php';
+require_once dirname(__FILE__).DIRECTORY_SEPARATOR.'SkroutzXML'.DIRECTORY_SEPARATOR.'Module.php';
 
-class skroutzxmlfeed extends \SkroutzXML\Module{
+class SkroutzXMLFeed extends \SkroutzXML\Module
+{
 }

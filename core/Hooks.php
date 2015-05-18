@@ -15,7 +15,8 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 
-class Hooks extends Core {
+class Hooks extends Core
+{
 	/**
 	 * Hooks are registered dynamically so no need to do this in install time. TODO is this efficient?
 	 *
@@ -27,27 +28,33 @@ class Hooks extends Core {
 	 * @static * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public static function registerHooks(\Module &$module, Hooks &$class) {
-		$hooks = (array) get_class_methods(get_class($class));
+	public static function registerHooks(\Module &$module, Hooks &$class)
+	{
+		$hooks = (array)get_class_methods(get_class($class));
 
-		foreach ($module->Options->getValue('hooks') as $hook) {
-			if (!in_array($hook, $hooks)) {
+		foreach ($module->Options->getValue('hooks') as $hook)
+		{
+			if (!in_array($hook, $hooks))
+			{
 				$module->unregisterHook($hook);
 			}
 		}
 
 		$result = true;
-		foreach ($hooks as $key => $hook) {
+		foreach ($hooks as $key => $hook)
+		{
 			$hookName = lcfirst(ltrim($hook, 'hook'));
-			if (!self::isHookFunction($hook)) {
-				unset ($hooks[ $key ]);
+			if (!self::isHookFunction($hook))
+			{
+				unset ($hooks[$key]);
 				continue;
 			}
-			if ($module->isRegisteredInHook($hookName)) {
+			if ($module->isRegisteredInHook($hookName))
+			{
 				continue;
 			}
 
-			$result &= (bool) $module->registerHook($hookName);
+			$result &= (bool)$module->registerHook($hookName);
 		}
 
 		$module->Options->saveOptions(array('hooks' => $hooks));
@@ -62,7 +69,8 @@ class Hooks extends Core {
 	 * @static * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public static function isHookFunction($name) {
+	public static function isHookFunction($name)
+	{
 		return preg_match(Core::$__REGEX_HOOK_FUNCTION, $name);
 	}
 
@@ -72,9 +80,11 @@ class Hooks extends Core {
 	 * @static * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public static function removeAllHooksFromModule(\Module &$module) {
-		foreach (\Hook::getHooks() as $k => $hook) {
-			$module->unregisterHook((int) $hook['id_hook']);
+	public static function removeAllHooksFromModule(\Module &$module)
+	{
+		foreach (\Hook::getHooks() as $k => $hook)
+		{
+			$module->unregisterHook((int)$hook['id_hook']);
 		}
 	}
 } 

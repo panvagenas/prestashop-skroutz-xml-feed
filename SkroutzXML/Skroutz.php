@@ -20,7 +20,8 @@ use XDaRk_v150216\Core;
  * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
  * @since 150213
  */
-class Skroutz extends Core {
+class Skroutz extends Core
+{
 	/**
 	 * @var int
 	 */
@@ -29,9 +30,10 @@ class Skroutz extends Core {
 	/**
 	 * @param \Module $moduleInstance
 	 */
-	public function __construct( \Module &$moduleInstance ) {
-		parent::__construct( $moduleInstance );
-		$this->defaultLang = \Configuration::get( 'PS_LANG_DEFAULT' );
+	public function __construct(\Module &$moduleInstance)
+	{
+		parent::__construct($moduleInstance);
+		$this->defaultLang = \Configuration::get('PS_LANG_DEFAULT');
 	}
 
 	/**
@@ -39,13 +41,15 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function generateXMLFile() {
+	public function generateXMLFile()
+	{
 		$productsArray = $this->createProductsArray();
-		if ( ! $this->XML->parseArray( $productsArray ) ) {
+		if (!$this->XML->parseArray($productsArray))
+		{
 			return false;
 		}
 
-		return count( $productsArray );
+		return count($productsArray);
 	}
 
 	/**
@@ -55,18 +59,20 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function printXMLFile($forceGeneration = false) {
-		$interval         = $this->getGenerationInterval();
-		$xmlCreation      = $this->XML->getFileInfo();
-		$createdTime      = strtotime( $xmlCreation[$this->XML->createdAtName]['value'] );
+	public function printXMLFile($forceGeneration = false)
+	{
+		$interval = $this->getGenerationInterval();
+		$xmlCreation = $this->XML->getFileInfo();
+		$createdTime = strtotime($xmlCreation[$this->XML->createdAtName]['value']);
 		$nextCreationTime = $interval + $createdTime;
-		$time             = time();
-		if ( $time > $nextCreationTime || $forceGeneration) {
+		$time = time();
+		if ($time > $nextCreationTime || $forceGeneration)
+		{
 			$this->generateXMLFile();
 		}
 
 		$this->XML->printXML();
-		exit( 0 );
+		exit(0);
 	}
 
 	/**
@@ -75,58 +81,67 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function createProductsArray() {
-		$products = \Product::getProducts( $this->defaultLang, 0, 0, 'id_product', 'ASC', false, !(bool)$this->Options->getValue( 'include_disabled' ) );
+	public function createProductsArray()
+	{
+		$products = \Product::getProducts($this->defaultLang, 0, 0, 'id_product', 'ASC', false, !(bool)$this->Options->getValue('include_disabled'));
 
-		$backOrdersInclude = $this->Options->getValue( 'avail_backorders' ) > 0;
-		$outOfStockInclude = $this->Options->getValue( 'avail_outOfStock' ) > 0;
+		$backOrdersInclude = $this->Options->getValue('avail_backorders') > 0;
+		$outOfStockInclude = $this->Options->getValue('avail_outOfStock') > 0;
 
-		foreach ( (array) $products as $key => $product ) {
-			$p = new \Product( $product['id_product'] );
+		foreach ((array)$products as $key => $product)
+		{
+			$p = new \Product($product['id_product']);
 
 			// TODO Check for product avail etc
 
-			if($p->condition == 'used'){
-				unset( $products[ $key ] );
+			if ($p->condition == 'used')
+			{
+				unset($products[$key]);
 				// TODO Log skipped product
 				continue;
 			}
 
 			$hasStock = $p->getRealQuantity($p->id) > 0; // TODO Is this a convenient way?
 
-			if ( $p->getType() != 0
-			     || $p->visibility == 'none'
-			     || $p->available_for_order == 0
-			) {
-				unset( $products[ $key ] );
+			if ($p->getType() != 0
+				|| $p->visibility == 'none'
+				|| $p->available_for_order == 0
+			)
+			{
+				unset($products[$key]);
 				// TODO Log skipped product
 				continue;
 			}
 
-			if(!$hasStock ){
+			if (!$hasStock)
+			{
 				// TODO backOrdersAllowed not working as expected
 				$quantity = $p->getRealQuantity($p->id);
-				if($quantity == 0 && !$outOfStockInclude && !$backOrdersInclude){
-					unset( $products[ $key ] );
+				if ($quantity == 0 && !$outOfStockInclude && !$backOrdersInclude)
+				{
+					unset($products[$key]);
 					// TODO Log skipped product
 					continue;
 				}
 
 				$backOrdersAllowed = $this->backOrdersAllowed($p);
-				if($quantity < 0 && (!$backOrdersInclude || !$backOrdersAllowed)){ // quantity < 0
-					unset( $products[ $key ] );
+				if ($quantity < 0 && (!$backOrdersInclude || !$backOrdersAllowed))
+				{ // quantity < 0
+					unset($products[$key]);
 					// TODO Log skipped product
 					continue;
 				}
 			}
 
-			$pushArray = $this->getProductArray( $p );
+			$pushArray = $this->getProductArray($p);
 
-			if ( ! empty( $pushArray ) ) {
-				$products[ $key ] = $pushArray;
-			} else {
+			if (!empty($pushArray))
+			{
+				$products[$key] = $pushArray;
+			} else
+			{
 				// TODO Log skipped product
-				unset( $products[ $key ] );
+				unset($products[$key]);
 			}
 		}
 
@@ -141,26 +156,29 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductArray( \Product &$product ) {
+	protected function getProductArray(\Product &$product)
+	{
 		$out = array();
 
-		$out['id']             = $this->getProductId( $product );
-		$out['mpn']            = $this->getProductMPN( $product );
-		$out['name']           = $this->getProductName( $product );
-		$out['link']           = $this->getProductLink( $product );
-		$out['image']          = $this->getProductImageLink( $product );
-		$out['category']       = $this->getProductCategories( $product );
-		$out['price_with_vat'] = $this->getProductPrice( $product );
-		$out['instock']        = $this->isInStock( $product );
-		$out['availability']   = $this->getAvailabilityString( $product );
-		$out['manufacturer']   = $this->getProductManufacturer( $product );
+		$out['id'] = $this->getProductId($product);
+		$out['mpn'] = $this->getProductMPN($product);
+		$out['name'] = $this->getProductName($product);
+		$out['link'] = $this->getProductLink($product);
+		$out['image'] = $this->getProductImageLink($product);
+		$out['category'] = $this->getProductCategories($product);
+		$out['price_with_vat'] = $this->getProductPrice($product);
+		$out['instock'] = $this->isInStock($product);
+		$out['availability'] = $this->getAvailabilityString($product);
+		$out['manufacturer'] = $this->getProductManufacturer($product);
 
-		if ( count( (array) $this->Options->getValue( 'map_size' ) ) ) {
-			$out['size'] = $this->getProductSizes( $product );
+		if (count((array)$this->Options->getValue('map_size')))
+		{
+			$out['size'] = $this->getProductSizes($product);
 		}
 
-		if ( count( (array) $this->Options->getValue( 'map_color' ) ) ) {
-			$out['color'] = $this->getProductColors( $product );
+		if (count((array)$this->Options->getValue('map_color')))
+		{
+			$out['color'] = $this->getProductColors($product);
 		}
 
 		return $out;
@@ -173,23 +191,27 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductColors( \Product &$product ) {
-		$colorList = \Product::getAttributesColorList( array( $product->id ) );
+	protected function getProductColors(\Product &$product)
+	{
+		$colorList = \Product::getAttributesColorList(array($product->id));
 
-		if ( ! $colorList || empty( $colorList ) || ! isset( $colorList[ $product->id ] ) || empty( $colorList[ $product->id ] ) ) {
+		if (!$colorList || empty($colorList) || !isset($colorList[$product->id]) || empty($colorList[$product->id]))
+		{
 			return '';
 		}
 
 		$colors = array();
-		foreach ( $colorList[ $product->id ] as $k => $color ) {
-			if ( (int) $product->isColorUnavailable( $color['id_attribute'], \Context::getContext()->shop->id ) === $color['id_product_attribute'] && ! $this->backOrdersAllowed( $product ) ) {
+		foreach ($colorList[$product->id] as $k => $color)
+		{
+			if ((int)$product->isColorUnavailable($color['id_attribute'], \Context::getContext()->shop->id) === $color['id_product_attribute'] && !$this->backOrdersAllowed($product))
+			{
 				continue;
 			}
 
-			array_push( $colors, $color['name'] );
+			array_push($colors, $color['name']);
 		}
 
-		return implode( ', ', $colors );
+		return implode(', ', $colors);
 	}
 
 	/**
@@ -200,30 +222,35 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductSizes( \Product &$product ) {
-		$mapSizes = $this->Options->getValue( 'map_size' );
+	protected function getProductSizes(\Product &$product)
+	{
+		$mapSizes = $this->Options->getValue('map_size');
 
-		if ( empty( $mapSizes ) ) {
+		if (empty($mapSizes))
+		{
 			return null;
 		}
 
 		$sizes = array();
-		foreach ( $product->getAttributeCombinations( $this->defaultLang ) as $key => $comp ) {
+		foreach ($product->getAttributeCombinations($this->defaultLang) as $key => $comp)
+		{
 			if (
 				$comp['is_color_group']
-				|| ! in_array( $comp['id_attribute'], $mapSizes )
-				|| ( $comp['quantity'] < 1 && ! $this->backOrdersAllowed( $product ) )
-			) {
+				|| !in_array($comp['id_attribute'], $mapSizes)
+				|| ($comp['quantity'] < 1 && !$this->backOrdersAllowed($product))
+			)
+			{
 				continue;
 			}
 
-			$size = $this->sanitizeVariationString( $comp['attribute_name'] );
-			if ( $this->isValidSizeString( $size ) ) {
-				array_push( $sizes, $size );
+			$size = $this->sanitizeVariationString($comp['attribute_name']);
+			if ($this->isValidSizeString($size))
+			{
+				array_push($sizes, $size);
 			}
 		}
 
-		return implode( ', ', array_unique( $sizes ) );
+		return implode(', ', array_unique($sizes));
 	}
 
 	/**
@@ -233,9 +260,10 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function sanitizeVariationString( $string ) {
-		$string = preg_replace( "/[^A-Za-z0-9 ]/", '.', strip_tags( trim( $string ) ) );
-		$string = strtoupper( $string );
+	protected function sanitizeVariationString($string)
+	{
+		$string = preg_replace("/[^A-Za-z0-9 ]/", '.', strip_tags(trim($string)));
+		$string = strtoupper($string);
 
 		return $string;
 	}
@@ -248,10 +276,11 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductManufacturer( \Product &$product ) {
-		$option = $this->Options->getValue( 'map_manufacturer' );
+	protected function getProductManufacturer(\Product &$product)
+	{
+		$option = $this->Options->getValue('map_manufacturer');
 
-		return $option == 0 ? $product->getWsManufacturerName() : \Supplier::getNameById( $product->id_supplier );
+		return $option == 0 ? $product->getWsManufacturerName() : \Supplier::getNameById($product->id_supplier);
 	}
 
 	/**
@@ -261,8 +290,9 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function isInStock( \Product &$product ) {
-		return ( $product->checkQty( 1 ) || $this->backOrdersAllowed( $product ) ) ? 'Y' : 'N';
+	protected function isInStock(\Product &$product)
+	{
+		return ($product->checkQty(1) || $this->backOrdersAllowed($product)) ? 'Y' : 'N';
 	}
 
 	/**
@@ -273,18 +303,20 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductPrice( \Product &$product ) {
-		$option = $this->Options->getValue( 'map_price_with_vat' );
+	protected function getProductPrice(\Product &$product)
+	{
+		$option = $this->Options->getValue('map_price_with_vat');
 
-		switch ( $option ) {
+		switch ($option)
+		{
 			case 1:
-				$price = round( $product->price, 2 );
+				$price = round($product->price, 2);
 				break;
 			case 2:
-				$price = round( $product->wholesale_price, 2 );
+				$price = round($product->wholesale_price, 2);
 				break;
 			default:
-				$price = $product->getPrice( true, null, 2 );
+				$price = $product->getPrice(true, null, 2);
 				break;
 		}
 
@@ -300,31 +332,37 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductCategories( \Product &$product, $ids = false ) {
+	protected function getProductCategories(\Product &$product, $ids = false)
+	{
 		$maxDepth = 13; // TODO Implement in options or remove
 		$categories = array();
-		if ( $this->Options->getValue( 'map_category' ) == 1 ) {
-			$info = \Tag::getProductTags( $product->id );
-			if ( $info && ! isset( $info[ $this->defaultLang ] ) ) {
-				$categories = (array) $info[ $this->defaultLang ];
+		if ($this->Options->getValue('map_category') == 1)
+		{
+			$info = \Tag::getProductTags($product->id);
+			if ($info && !isset($info[$this->defaultLang]))
+			{
+				$categories = (array)$info[$this->defaultLang];
 			}
-		} else {
+		} else
+		{
 			$defaultCat = $product->getDefaultCategory();
-			if($ids){
+			if ($ids)
+			{
 				return $defaultCat;
 			}
 			$category = new \Category($defaultCat);
 
-			do{
-				array_push( $categories, $ids ? $category->id : $category->name[$this->defaultLang] );
+			do
+			{
+				array_push($categories, $ids ? $category->id : $category->name[$this->defaultLang]);
 				$category = new \Category($category->id_parent);
-			}while($category->id_parent && !$category->is_root_category);
+			} while ($category->id_parent && !$category->is_root_category);
 
 			$categories = array_reverse($categories);
 		}
 
 
-		return is_array( $categories ) ? implode( ' - ',  $categories)  : $categories;
+		return is_array($categories) ? implode(' - ', $categories) : $categories;
 	}
 
 	/**
@@ -335,24 +373,29 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductImageLink( \Product &$product ) {
+	protected function getProductImageLink(\Product &$product)
+	{
 		$link = new \Link();
 
 		$imageLink = null;
-		if ( $this->Options->getValue( 'map_image' ) == 1 ) {
-			$images = $product->getImages( $this->defaultLang );
-			if ( ! empty( $images ) ) {
-				shuffle( $images );
-				$imageLink = $link->getImageLink( $product->link_rewrite, end( $images )['id_image'] );
+		if ($this->Options->getValue('map_image') == 1)
+		{
+			$images = $product->getImages($this->defaultLang);
+			if (!empty($images))
+			{
+				shuffle($images);
+				$imageLink = $link->getImageLink($product->link_rewrite, end($images)['id_image']);
 			}
-		} else {
-			$coverImage = \Image::getCover( $product->id );
-			if ( $coverImage && ! empty( $coverImage ) && isset( $coverImage['id_image'] ) ) {
-				$imageLink = $link->getImageLink( $product->link_rewrite, $coverImage['id_image'] );
+		} else
+		{
+			$coverImage = \Image::getCover($product->id);
+			if ($coverImage && !empty($coverImage) && isset($coverImage['id_image']))
+			{
+				$imageLink = $link->getImageLink($product->link_rewrite, $coverImage['id_image']);
 			}
 		}
 
-		return empty( $imageLink ) ? '' : urldecode( $this->addHttp( $imageLink ) );
+		return empty($imageLink) ? '' : urldecode($this->addHttp($imageLink));
 	}
 
 	/**
@@ -363,10 +406,12 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductId( \Product &$product ) {
-		$option = $this->Options->getValue( 'map_id' );
+	protected function getProductId(\Product &$product)
+	{
+		$option = $this->Options->getValue('map_id');
 
-		switch ( $option ) {
+		switch ($option)
+		{
 			case 1:
 				$id = $product->ean13;
 				break;
@@ -389,10 +434,12 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductMPN( \Product &$product ) {
-		$option = $this->Options->getValue( 'map_mpn' );
+	protected function getProductMPN(\Product &$product)
+	{
+		$option = $this->Options->getValue('map_mpn');
 
-		switch ( $option ) {
+		switch ($option)
+		{
 			case 1:
 				$id = $product->ean13;
 				break;
@@ -418,12 +465,13 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductLink( \Product &$product ) {
+	protected function getProductLink(\Product &$product)
+	{
 		$link = new \Link();
 
-		$pLink = $link->getProductLink( $product );
+		$pLink = $link->getProductLink($product);
 
-		return urldecode( $this->addHttp( $pLink ) );
+		return urldecode($this->addHttp($pLink));
 	}
 
 	/**
@@ -434,10 +482,11 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getProductName( \Product &$product ) {
-		$name = is_array( $product->name ) && isset( $product->name[ $this->defaultLang ] ) ? $product->name[ $this->defaultLang ] : ( is_string( $product->name ) ? $product->name : 0 );
+	protected function getProductName(\Product &$product)
+	{
+		$name = is_array($product->name) && isset($product->name[$this->defaultLang]) ? $product->name[$this->defaultLang] : (is_string($product->name) ? $product->name : 0);
 
-		return $name . ' ' . ( $this->Options->getValue( 'map_name_append_sku' ) ? $this->getProductId( $product ) : '' );
+		return $name.' '.($this->Options->getValue('map_name_append_sku') ? $this->getProductId($product) : '');
 	}
 
 	/**
@@ -447,9 +496,11 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function addHttp( $url ) {
-		if ( ! preg_match( "~^(?:f|ht)tps?://~i", $url ) ) {
-			$url = "http://" . $url;
+	protected function addHttp($url)
+	{
+		if (!preg_match("~^(?:f|ht)tps?://~i", $url))
+		{
+			$url = "http://".$url;
 		}
 
 		return $url;
@@ -463,23 +514,28 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getAvailabilityString( \Product &$product ) {
+	protected function getAvailabilityString(\Product &$product)
+	{
 		$hasStock = $product->getRealQuantity($product->id) > 0;
 
 		// If product is in stock
-		if ( $hasStock ) {
-			return $this->Options->availOptions[ $this->Options->getValue( 'avail_inStock' ) ];
-		} elseif ( $this->backOrdersAllowed( $product ) ) {
+		if ($hasStock)
+		{
+			return $this->Options->availOptions[$this->Options->getValue('avail_inStock')];
+		} elseif ($this->backOrdersAllowed($product))
+		{
 			// if product is out of stock and no backorders then return false
-			if ( $this->Options->getValue( 'avail_backorders' ) == 0 ) {
+			if ($this->Options->getValue('avail_backorders') == 0)
+			{
 				return false;
 			}
 
 			// else return value
-			return $this->Options->availOptions[ $this->Options->getValue( 'avail_backorders' ) - 1 ];
-		} elseif ( $this->Options->getValue( 'avail_outOfStock' ) > 0 ) {
+			return $this->Options->availOptions[$this->Options->getValue('avail_backorders') - 1];
+		} elseif ($this->Options->getValue('avail_outOfStock') > 0)
+		{
 			// no stock, no backorders but must include product. Return value
-			return $this->Options->availOptions[ $this->Options->getValue( 'avail_outOfStock' ) - 1 ];
+			return $this->Options->availOptions[$this->Options->getValue('avail_outOfStock') - 1];
 		}
 
 		return false;
@@ -492,36 +548,40 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function formatSizeColorStrings( $string ) {
-		if ( is_array( $string ) ) {
-			array_walk( $string, function ( $item, $key ) {
-				return $this->formatSizeColorStrings( $item );
-			} );
+	protected function formatSizeColorStrings($string)
+	{
+		if (is_array($string))
+		{
+			array_walk($string, function ($item, $key)
+			{
+				return $this->formatSizeColorStrings($item);
+			});
 
-			return implode( ',', $string );
+			return implode(',', $string);
 		}
 
-		$patterns        = array();
-		$patterns[0]     = '/\|/';
-		$patterns[1]     = '/\s+/';
-		$replacements    = array();
+		$patterns = array();
+		$patterns[0] = '/\|/';
+		$patterns[1] = '/\s+/';
+		$replacements = array();
 		$replacements[2] = ',';
 		$replacements[1] = '';
 
-		return preg_replace( $patterns, $replacements, $string );
+		return preg_replace($patterns, $replacements, $string);
 	}
 
 	/**
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function debug() {
-		echo "<strong>not real mem usage: </strong>" . ( memory_get_peak_usage( false ) / 1024 / 1024 ) . " MiB<br>";
-		echo "<strong>real mem usage: </strong>" . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . " MiB<br>";
-		$sTime     = microtime( true );
+	public function debug()
+	{
+		echo "<strong>not real mem usage: </strong>".(memory_get_peak_usage(false) / 1024 / 1024)." MiB<br>";
+		echo "<strong>real mem usage: </strong>".(memory_get_peak_usage(true) / 1024 / 1024)." MiB<br>";
+		$sTime = microtime(true);
 		$prodArray = $this->createProductsArray();
-		echo "<strong>time: </strong>" . ( microtime( true ) - $sTime ) . " sec<br><br>";
-		var_dump( $prodArray );
+		echo "<strong>time: </strong>".(microtime(true) - $sTime)." sec<br><br>";
+		var_dump($prodArray);
 		die;
 	}
 
@@ -532,8 +592,9 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function backOrdersAllowed( \Product $product ) {
-		$is = \Product::isAvailableWhenOutOfStock( $product->out_of_stock );
+	protected function backOrdersAllowed(\Product $product)
+	{
+		$is = \Product::isAvailableWhenOutOfStock($product->out_of_stock);
 		return $is == 1;
 	}
 
@@ -544,8 +605,10 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function isValidSizeString( $string ) {
-		if ( is_numeric( $string ) ) {
+	protected function isValidSizeString($string)
+	{
+		if (is_numeric($string))
+		{
 			return true;
 		}
 
@@ -565,7 +628,7 @@ class Skroutz extends Core {
 			'Extra Large'
 		);
 
-		return in_array( $string, $validStrings );
+		return in_array($string, $validStrings);
 	}
 
 	/**
@@ -573,12 +636,14 @@ class Skroutz extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	protected function getGenerationInterval() {
+	protected function getGenerationInterval()
+	{
 		$interval = (float)$this->Options->getValue('xml_interval');
-		return (int)ceil($interval*3600);
+		return (int)ceil($interval * 3600);
 	}
 
-	public function getGenerateURL(){
-		return \Tools::getHttpHost(true) . __PS_BASE_URI__ . 'index.php?' . $this->Options->getValue('request_var') . '=' . $this->Options->getValue('request_var_value');
+	public function getGenerateURL()
+	{
+		return \Tools::getHttpHost(true).__PS_BASE_URI__.'index.php?'.$this->Options->getValue('request_var').'='.$this->Options->getValue('request_var_value');
 	}
 }

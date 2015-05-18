@@ -14,7 +14,8 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class Arrays extends Core{
+class Arrays extends Core
+{
 	/**
 	 * Short version of `(isset() && is_array())`
 	 *
@@ -62,10 +63,10 @@ class Arrays extends Core{
 	 *
 	 * @note Unlike PHP's `is_...` functions, this will NOT throw a NOTICE.
 	 *
-	 * @param mixed   $var A variable by reference (no NOTICE).
+	 * @param mixed $var A variable by reference (no NOTICE).
 	 *    If `$var` is NOT already set, it will be set to NULL by PHP, as a result of passing it by reference.
 	 *
-	 * @param mixed   $or Defaults to an empty array. This is the return value if `$var` is NOT set, or is NOT an array.
+	 * @param mixed $or Defaults to an empty array. This is the return value if `$var` is NOT set, or is NOT an array.
 	 *
 	 * @param boolean $set_var Defaults to FALSE. If TRUE, the value of `$var` will be set (via reference) to the return value.
 	 *
@@ -74,12 +75,12 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function isset_or(&$var, $or = array(), $set_var = FALSE)
+	public function isset_or(&$var, $or = array(), $set_var = false)
 	{
-		if(isset($var) && is_array($var))
+		if (isset($var) && is_array($var))
 			return $var;
 
-		if($set_var)
+		if ($set_var)
 			return ($var = $or);
 
 		return $or;
@@ -98,7 +99,7 @@ class Arrays extends Core{
 	 */
 	public function ¤isset_or($var, $or = array())
 	{
-		if(isset($var) && is_array($var))
+		if (isset($var) && is_array($var))
 			return $var;
 
 		return $or;
@@ -109,10 +110,10 @@ class Arrays extends Core{
 	 *
 	 * @note Unlike PHP's `is_...` functions, this will NOT throw a NOTICE.
 	 *
-	 * @param mixed   $var A variable by reference (no NOTICE).
+	 * @param mixed $var A variable by reference (no NOTICE).
 	 *    If `$var` was NOT already set, it will be set to NULL by PHP, as a result of passing it by reference.
 	 *
-	 * @param mixed   $or Defaults to an empty array. This is the return value if `$var` IS empty, or is NOT an array.
+	 * @param mixed $or Defaults to an empty array. This is the return value if `$var` IS empty, or is NOT an array.
 	 *
 	 * @param boolean $set_var Defaults to FALSE. If TRUE, the value of `$var` will be set (via reference) to the return value.
 	 *
@@ -121,12 +122,12 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function is_not_empty_or(&$var, $or = array(), $set_var = FALSE)
+	public function is_not_empty_or(&$var, $or = array(), $set_var = false)
 	{
-		if(!empty($var) && is_array($var))
+		if (!empty($var) && is_array($var))
 			return $var;
 
-		if($set_var)
+		if ($set_var)
 			return ($var = $or);
 
 		return $or;
@@ -145,7 +146,7 @@ class Arrays extends Core{
 	 */
 	public function ¤is_not_empty_or($var, $or = array())
 	{
-		if(!empty($var) && is_array($var))
+		if (!empty($var) && is_array($var))
 			return $var;
 
 		return $or;
@@ -190,13 +191,13 @@ class Arrays extends Core{
 	 *
 	 * @return boolean TRUE if all arguments are arrays.
 	 */
-	public function are_set(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function are_set(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(!isset($_arg) || !is_array($_arg))
-				return FALSE;
+		foreach (func_get_args() as $_arg)
+			if (!isset($_arg) || !is_array($_arg))
+				return false;
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -209,13 +210,13 @@ class Arrays extends Core{
 	 *
 	 * @return boolean See `$this->are_set()` for further details.
 	 */
-	public function ¤are_set($a, $b = NULL, $c = NULL)
+	public function ¤are_set($a, $b = null, $c = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(!isset($_arg) || !is_array($_arg))
-				return FALSE;
+		foreach (func_get_args() as $_arg)
+			if (!isset($_arg) || !is_array($_arg))
+				return false;
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -257,13 +258,13 @@ class Arrays extends Core{
 	 *
 	 * @return boolean TRUE if all arguments are arrays, and they're NOT empty.
 	 */
-	public function are_not_empty(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function are_not_empty(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(empty($_arg) || !is_array($_arg))
-				return FALSE;
+		foreach (func_get_args() as $_arg)
+			if (empty($_arg) || !is_array($_arg))
+				return false;
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -276,13 +277,13 @@ class Arrays extends Core{
 	 *
 	 * @return boolean See `$this->are_not_empty()` for further details.
 	 */
-	public function ¤are_not_empty($a, $b = NULL, $c = NULL)
+	public function ¤are_not_empty($a, $b = null, $c = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(empty($_arg) || !is_array($_arg))
-				return FALSE;
+		foreach (func_get_args() as $_arg)
+			if (empty($_arg) || !is_array($_arg))
+				return false;
 
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -332,31 +333,29 @@ class Arrays extends Core{
 	 *    Can have arrays with any nested value type; e.g. it's NOT an empty array.
 	 *    Can have empty objects; e.g. we consider these containers.
 	 */
-	public function are_not_empty_in(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function are_not_empty_in(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
 		$in_array = '.arrays.are_not_empty_in.in-array.b'; // Cannot use a constant here; MUST be passed by reference.
 		// Recursion identifier (while inside an array).
 
-		foreach(func_get_args() as $_arg)
+		foreach (func_get_args() as $_arg)
 		{
-			if(is_array($_arg))
+			if (is_array($_arg))
 			{
-				if(empty($_arg)) return FALSE;
+				if (empty($_arg)) return false;
 
-				foreach($_arg as $__arg)
-					if(!$this->are_not_empty_in($__arg, $in_array))
-						return FALSE;
-			}
-			else if(is_object($_arg))
+				foreach ($_arg as $__arg)
+					if (!$this->are_not_empty_in($__arg, $in_array))
+						return false;
+			} else if (is_object($_arg))
 			{
-				foreach($_arg as $__arg)
-					if(!$this->are_not_empty_in($__arg))
-						return FALSE;
-			}
-			else if($b !== $in_array)
-				return FALSE;
+				foreach ($_arg as $__arg)
+					if (!$this->are_not_empty_in($__arg))
+						return false;
+			} else if ($b !== $in_array)
+				return false;
 		}
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -369,31 +368,29 @@ class Arrays extends Core{
 	 *
 	 * @return boolean See `$this->are_not_empty_in()` for further details.
 	 */
-	public function ¤are_not_empty_in($a, $b = NULL, $c = NULL)
+	public function ¤are_not_empty_in($a, $b = null, $c = null)
 	{
 		$in_array = '.arrays.¤are_not_empty_in.in-array.b';
 		// Recursion identifier (while inside an array).
 
-		foreach(func_get_args() as $_arg)
+		foreach (func_get_args() as $_arg)
 		{
-			if(is_array($_arg))
+			if (is_array($_arg))
 			{
-				if(empty($_arg)) return FALSE;
+				if (empty($_arg)) return false;
 
-				foreach($_arg as $__arg)
-					if(!$this->¤are_not_empty_in($__arg, $in_array))
-						return FALSE;
-			}
-			else if(is_object($_arg))
+				foreach ($_arg as $__arg)
+					if (!$this->¤are_not_empty_in($__arg, $in_array))
+						return false;
+			} else if (is_object($_arg))
 			{
-				foreach($_arg as $__arg)
-					if(!$this->¤are_not_empty_in($__arg))
-						return FALSE;
-			}
-			else if($b !== $in_array)
-				return FALSE;
+				foreach ($_arg as $__arg)
+					if (!$this->¤are_not_empty_in($__arg))
+						return false;
+			} else if ($b !== $in_array)
+				return false;
 		}
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -435,10 +432,10 @@ class Arrays extends Core{
 	 *
 	 * @return array The first array argument that's NOT empty, else an empty array.
 	 */
-	public function not_empty_coalesce(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function not_empty_coalesce(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(!empty($_arg) && is_array($_arg))
+		foreach (func_get_args() as $_arg)
+			if (!empty($_arg) && is_array($_arg))
 				return $_arg;
 
 		return array();
@@ -454,10 +451,10 @@ class Arrays extends Core{
 	 *
 	 * @return array See `$this->not_empty_coalesce()` for further details.
 	 */
-	public function ¤not_empty_coalesce($a, $b = NULL, $c = NULL)
+	public function ¤not_empty_coalesce($a, $b = null, $c = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(!empty($_arg) && is_array($_arg))
+		foreach (func_get_args() as $_arg)
+			if (!empty($_arg) && is_array($_arg))
 				return $_arg;
 
 		return array();
@@ -502,10 +499,10 @@ class Arrays extends Core{
 	 *
 	 * @return array The first array argument, else an empty array.
 	 */
-	public function isset_coalesce(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function isset_coalesce(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(isset($_arg) && is_array($_arg))
+		foreach (func_get_args() as $_arg)
+			if (isset($_arg) && is_array($_arg))
 				return $_arg;
 		unset($_arg);
 
@@ -522,10 +519,10 @@ class Arrays extends Core{
 	 *
 	 * @return array See `$this->isset_coalesce()` for further details.
 	 */
-	public function ¤isset_coalesce($a, $b = NULL, $c = NULL)
+	public function ¤isset_coalesce($a, $b = null, $c = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(isset($_arg) && is_array($_arg))
+		foreach (func_get_args() as $_arg)
+			if (isset($_arg) && is_array($_arg))
 				return $_arg;
 
 		return array();
@@ -572,7 +569,7 @@ class Arrays extends Core{
 	/**
 	 * Forces an initial array value (NOT a deep scan).
 	 *
-	 * @param mixed   $value Anything can be converted to an array.
+	 * @param mixed $value Anything can be converted to an array.
 	 *
 	 * @param boolean $include_protected_private_properties Optional. Defaults to FALSE. By default, we do NOT include protected/private properties
 	 *    from objects being converted into arrays (even if they were accessible, which they are in this case). That is, when an object is converted to an array,
@@ -590,19 +587,19 @@ class Arrays extends Core{
 	 *
 	 * @see {@link http://www.php.net/manual/en/language.types.array.php#language.types.array.casting}
 	 */
-	public function ify($value, $include_protected_private_properties = FALSE)
+	public function ify($value, $include_protected_private_properties = false)
 	{
-		if(is_object($value))
+		if (is_object($value))
 		{
 			$value = (array)$value;
 
-			foreach($value as $_key => $_value)
-				if(strpos($_key, "\0") === 0)
+			foreach ($value as $_key => $_value)
+				if (strpos($_key, "\0") === 0)
 				{
 					unset($value[$_key]);
-					if($include_protected_private_properties)
+					if ($include_protected_private_properties)
 					{
-						$_key         = (string)substr($_key, strrpos($_key, "\0") + 1);
+						$_key = (string)substr($_key, strrpos($_key, "\0") + 1);
 						$value[$_key] = $_value;
 					}
 				}
@@ -621,7 +618,7 @@ class Arrays extends Core{
 	 *    However, private/protected properties *will* be included, if `$include_protected_private_properties` is TRUE.
 	 *    Static properties are NEVER considered by this routine, because static properties are ignored while typecasting objects to arrays in PHP.
 	 *
-	 * @param mixed   $value Anything can be converted to an array.
+	 * @param mixed $value Anything can be converted to an array.
 	 *    However, please see the details regarding parameter `$include_scalars_resources`.
 	 *    By default, we do NOT arrayify scalars and/or resources in this routine.
 	 *
@@ -651,34 +648,34 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function ify_deep($value, $include_protected_private_properties = FALSE, $include_scalars_resources = FALSE, $___recursion = FALSE)
+	public function ify_deep($value, $include_protected_private_properties = false, $include_scalars_resources = false, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('', 'boolean', 'boolean', 'boolean', func_get_args());
 
-		if(is_array($value) || is_object($value))
+		if (is_array($value) || is_object($value))
 		{
-			if(is_object($value))
+			if (is_object($value))
 			{
 				$value = (array)$value;
 
-				foreach($value as $_key => $_value)
-					if(strpos($_key, "\0") === 0)
+				foreach ($value as $_key => $_value)
+					if (strpos($_key, "\0") === 0)
 					{
 						unset($value[$_key]);
-						if($include_protected_private_properties)
+						if ($include_protected_private_properties)
 						{
-							$_key         = (string)substr($_key, strrpos($_key, "\0") + 1);
+							$_key = (string)substr($_key, strrpos($_key, "\0") + 1);
 							$value[$_key] = $_value;
 						}
 					}
 				unset($_key, $_value); // Housekeeping.
 			}
-			foreach($value as &$_value)
-				$_value = $this->ify_deep($_value, $include_protected_private_properties, $include_scalars_resources, TRUE);
+			foreach ($value as &$_value)
+				$_value = $this->ify_deep($_value, $include_protected_private_properties, $include_scalars_resources, true);
 			return $value;
 		}
-		if($include_scalars_resources)
+		if ($include_scalars_resources)
 			return (array)$value;
 
 		return $value;
@@ -690,7 +687,7 @@ class Arrays extends Core{
 	 * @note This is a recursive scan running deeply into multiple dimensions of an array.
 	 *    This allows you to obtain all values from a specific dimension; in ANY key.
 	 *
-	 * @param array   $array Any input array will do fine here.
+	 * @param array $array Any input array will do fine here.
 	 *
 	 * @param integer $from_dimension Optional. Defaults to `1`; but normally this is `2` or higher.
 	 *    In the case of `1`, it's simpler to just call `array_values()` (native to PHP).
@@ -718,30 +715,30 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function values($array, $from_dimension = 1, $preserve_keys = FALSE, $___current_dimension = 1, $___recursion = FALSE)
+	public function values($array, $from_dimension = 1, $preserve_keys = false, $___current_dimension = 1, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'integer', 'boolean', 'integer:!empty', 'boolean', func_get_args());
 
-		if($from_dimension <= 1) // This is exactly the same as `array_values()`.
+		if ($from_dimension <= 1) // This is exactly the same as `array_values()`.
 			return array_values($array); // Just in case it's called this way.
 
 		$values = array(); // Initialize array of values.
 
-		foreach($array as $_value)
+		foreach ($array as $_value)
 		{
-			if(!is_array($_value)) continue;
+			if (!is_array($_value)) continue;
 
-			foreach($_value as $__key => $__value)
-				if($preserve_keys) $values[$__key] = $__value;
+			foreach ($_value as $__key => $__value)
+				if ($preserve_keys) $values[$__key] = $__value;
 				else $values[] = $__value; // Better (default behavior).
 			unset($__key, $__value); // Housekeeping.
 		}
 		unset($_value); // Housekeeping.
 
-		if($from_dimension === $___current_dimension + 1) return $values;
+		if ($from_dimension === $___current_dimension + 1) return $values;
 
-		return $this->values($values, $from_dimension, $preserve_keys, $___current_dimension + 1, TRUE);
+		return $this->values($values, $from_dimension, $preserve_keys, $___current_dimension + 1, true);
 	}
 
 	/**
@@ -757,11 +754,11 @@ class Arrays extends Core{
 	{
 		$this->check_arg_types('array', func_get_args());
 
-		foreach(($iterator = $this->iterator($array)) as $_value)
+		foreach (($iterator = $this->iterator($array)) as $_value)
 		{
 			$_keys = array(); // Initialize keys.
 
-			foreach(range(0, $iterator->getDepth()) as $_depth)
+			foreach (range(0, $iterator->getDepth()) as $_depth)
 				$_keys[] = $iterator->getSubIterator($_depth)->key();
 
 			$dot_keys[join('.', $_keys)] = $_value;
@@ -778,7 +775,7 @@ class Arrays extends Core{
 	 *    Also, see {@link strings::esc_js_sq_deep()} for subtle differences when it comes to line breaks.
 	 *    • Special handling for line breaks in strings: `\r\n` and `\r` are converted to `\n`.
 	 *
-	 * @param array   $array A PHP array to convert to a JS array/object (or JS array values; or JS object properties).
+	 * @param array $array A PHP array to convert to a JS array/object (or JS array values; or JS object properties).
 	 *    IMPORTANT: A PHP array is ONLY converted to a true JavaScript array if it's indexed numerically with a `0` based index.
 	 *    In all other cases the array is treated as associative; and it's converted to a JavaScript object; following JSON standards.
 	 *
@@ -789,7 +786,7 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function to_js($array, $encapsulate = TRUE)
+	public function to_js($array, $encapsulate = true)
 	{
 		$this->check_arg_types('array', 'boolean', func_get_args());
 
@@ -811,9 +808,9 @@ class Arrays extends Core{
 	{
 		$this->check_arg_types('array', func_get_args());
 
-		foreach($array as $_key => $_value)
+		foreach ($array as $_key => $_value)
 		{
-			if(is_array($_value) || is_object($_value))
+			if (is_array($_value) || is_object($_value))
 				unset($array[$_key]);
 		}
 		return $array;
@@ -824,7 +821,7 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array   $array Input array.
+	 * @param array $array Input array.
 	 *
 	 * @param boolean $___recursion Internal use only.
 	 *
@@ -835,19 +832,19 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function lc_keys_deep($array, $___recursion = FALSE)
+	public function lc_keys_deep($array, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'boolean', func_get_args());
 
 		$lc_keys = array(); // Initialize new array.
 
-		foreach($array as $_key => $_value)
+		foreach ($array as $_key => $_value)
 		{
 			$_key = strtolower((string)$_key);
 
-			if(is_array($_value))
-				$lc_keys[$_key] = $this->lc_keys_deep($_value, TRUE);
+			if (is_array($_value))
+				$lc_keys[$_key] = $this->lc_keys_deep($_value, true);
 			else $lc_keys[$_key] = $_value;
 		}
 		return $lc_keys;
@@ -859,7 +856,7 @@ class Arrays extends Core{
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 * @note For mixed key types, use the `SORT_STRING` flag.
 	 *
-	 * @param array   $array Input array (NOT by reference).
+	 * @param array $array Input array (NOT by reference).
 	 *
 	 * @param integer $flags Same flags as PHP's `ksort()` function.
 	 *    Defaults to `SORT_REGULAR`.
@@ -870,17 +867,17 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function ksort_deep($array, $flags = SORT_REGULAR, $___recursion = FALSE)
+	public function ksort_deep($array, $flags = SORT_REGULAR, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'integer', 'boolean', func_get_args());
 
 		ksort($array, $flags);
 
-		foreach($array as &$_value)
+		foreach ($array as &$_value)
 		{
-			if(is_array($_value))
-				$_value = $this->ksort_deep($_value, $flags, TRUE);
+			if (is_array($_value))
+				$_value = $this->ksort_deep($_value, $flags, true);
 		}
 		return $array;
 	}
@@ -890,7 +887,7 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array   $array An input array.
+	 * @param array $array An input array.
 	 *
 	 * @param boolean $___recursion Internal use only.
 	 *
@@ -898,18 +895,18 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function remove_numeric_keys_deep($array, $___recursion = FALSE)
+	public function remove_numeric_keys_deep($array, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'boolean', func_get_args());
 
-		foreach($array as $_key => &$_value)
+		foreach ($array as $_key => &$_value)
 		{
-			if(is_numeric($_key))
+			if (is_numeric($_key))
 				unset($array[$_key]);
 
-			else if(is_array($_value))
-				$_value = $this->remove_numeric_keys_deep($_value, TRUE);
+			else if (is_array($_value))
+				$_value = $this->remove_numeric_keys_deep($_value, true);
 		}
 		return $array;
 	}
@@ -919,7 +916,7 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array   $array An input array.
+	 * @param array $array An input array.
 	 *
 	 * @param boolean $___recursion Internal use only.
 	 *
@@ -927,16 +924,16 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function remove_empty_values_deep($array, $___recursion = FALSE)
+	public function remove_empty_values_deep($array, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'boolean', func_get_args());
 
-		foreach($array as $_key => &$_value)
+		foreach ($array as $_key => &$_value)
 		{
-			if(is_array($_value))
-				$_value = $this->remove_empty_values_deep($_value, TRUE);
-			if(empty($_value)) unset($array[$_key]);
+			if (is_array($_value))
+				$_value = $this->remove_empty_values_deep($_value, true);
+			if (empty($_value)) unset($array[$_key]);
 		}
 		return $array;
 	}
@@ -946,7 +943,7 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array   $array An input array.
+	 * @param array $array An input array.
 	 *
 	 * @param boolean $___recursion Internal use only.
 	 *
@@ -954,16 +951,16 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function remove_nulls_deep($array, $___recursion = FALSE)
+	public function remove_nulls_deep($array, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'boolean', func_get_args());
 
-		foreach($array as $_key => &$_value)
+		foreach ($array as $_key => &$_value)
 		{
-			if(is_array($_value))
-				$_value = $this->remove_nulls_deep($_value, TRUE);
-			else if(is_null($_value)) unset($array[$_key]);
+			if (is_array($_value))
+				$_value = $this->remove_nulls_deep($_value, true);
+			else if (is_null($_value)) unset($array[$_key]);
 		}
 		return $array;
 	}
@@ -973,7 +970,7 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array   $array An input array.
+	 * @param array $array An input array.
 	 *
 	 * @param boolean $___recursion Internal use only.
 	 *
@@ -981,16 +978,16 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function remove_0b_strings_deep($array, $___recursion = FALSE)
+	public function remove_0b_strings_deep($array, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('array', 'boolean', func_get_args());
 
-		foreach($array as $_key => &$_value)
+		foreach ($array as $_key => &$_value)
 		{
-			if(is_array($_value))
-				$_value = $this->remove_0b_strings_deep($_value, TRUE);
-			else if(is_string($_value) && !isset($_value[0]))
+			if (is_array($_value))
+				$_value = $this->remove_0b_strings_deep($_value, true);
+			else if (is_string($_value) && !isset($_value[0]))
 				unset($array[$_key]);
 		}
 		return $array;
@@ -1014,18 +1011,18 @@ class Arrays extends Core{
 	{
 		$this->check_arg_types('array', func_get_args());
 
-		foreach($array as &$_value)
+		foreach ($array as &$_value)
 		{
-			if(!is_resource($_value))
+			if (!is_resource($_value))
 				$_value = serialize($_value);
 		}
 		unset($_value);
 
 		$array = array_unique($array);
 
-		foreach($array as &$_value)
+		foreach ($array as &$_value)
 		{
-			if(!is_resource($_value))
+			if (!is_resource($_value))
 				$_value = unserialize($_value);
 		}
 		return $array;
@@ -1039,7 +1036,7 @@ class Arrays extends Core{
 	 *
 	 * @return array {@inheritdoc}
 	 */
-	public function compile_key_elements($array, $keys, $preserve_keys = FALSE, $search_dimensions = 1)
+	public function compile_key_elements($array, $keys, $preserve_keys = false, $search_dimensions = 1)
 	{
 		return $this->compile_key_elements_deep($array, $keys, $preserve_keys, $search_dimensions);
 	}
@@ -1049,22 +1046,22 @@ class Arrays extends Core{
 	 *
 	 * @note This is a recursive scan running deeply into multiple dimensions of arrays.
 	 *
-	 * @param array                $array An input array to search in.
+	 * @param array $array An input array to search in.
 	 *
 	 * @param string|integer|array $keys An array of `key` elements to compile.
 	 *    In other words, elements with one of these array keys, are what we're looking for.
 	 *    A string|integer is also accepted here (if only one key), and it's converted internally to an array.
 	 *
-	 * @param boolean              $preserve_keys Optional. Defaults to a FALSE value.
+	 * @param boolean $preserve_keys Optional. Defaults to a FALSE value.
 	 *    If this is TRUE, the return array WILL preserve numeric/associative keys, instead of forcing a numerically indexed array.
 	 *    This ALSO prevents duplicates in the return array, which may NOT be desirable in certain circumstances.
 	 *    Particularly when/if searching a multidimensional array (where keys could be found in multiple dimensions).
 	 *    In fact, in some cases, this could return data you did NOT want/expect, so please be cautious.
 	 *
-	 * @param integer              $search_dimensions The number of dimensions to search. Defaults to `-1` (infinite).
+	 * @param integer $search_dimensions The number of dimensions to search. Defaults to `-1` (infinite).
 	 *    If `$preserve_keys` is TRUE, consider setting this to a value of `1`.
 	 *
-	 * @param integer              $___current_dimension For internal use only; used in recursion.
+	 * @param integer $___current_dimension For internal use only; used in recursion.
 	 *
 	 * @return array The array of compiled key elements, else an empty array, if no key elements were found.
 	 *    By default, the return array will be indexed numerically (e.g. keys are NOT preserved here).
@@ -1073,22 +1070,22 @@ class Arrays extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function compile_key_elements_deep($array, $keys, $preserve_keys = FALSE, $search_dimensions = -1, $___current_dimension = 1)
+	public function compile_key_elements_deep($array, $keys, $preserve_keys = false, $search_dimensions = -1, $___current_dimension = 1)
 	{
-		if($___current_dimension === 1) // We only check arg types initially (i.e. do NOT check recursions).
+		if ($___current_dimension === 1) // We only check arg types initially (i.e. do NOT check recursions).
 			$this->check_arg_types('array', array('string', 'integer', 'array'), 'boolean', 'integer', 'integer', func_get_args());
 
 		$key_elements = array(); // Initialize this array.
-		$keys         = (array)$keys; // Force array.
+		$keys = (array)$keys; // Force array.
 
-		foreach($array as $_key => $_value)
+		foreach ($array as $_key => $_value)
 		{
-			if(in_array($_key, $keys, TRUE))
-				if($preserve_keys) $key_elements[$_key] = $_value;
+			if (in_array($_key, $keys, true))
+				if ($preserve_keys) $key_elements[$_key] = $_value;
 				else $key_elements[] = $_value;
 
-			if(($search_dimensions < 1 || $___current_dimension < $search_dimensions) && is_array($_value)
-			   && ($_key_elements = $this->compile_key_elements_deep($_value, $keys, $preserve_keys, $search_dimensions, $___current_dimension + 1))
+			if (($search_dimensions < 1 || $___current_dimension < $search_dimensions) && is_array($_value)
+				&& ($_key_elements = $this->compile_key_elements_deep($_value, $keys, $preserve_keys, $search_dimensions, $___current_dimension + 1))
 			) $key_elements = array_merge($key_elements, $_key_elements);
 		}
 		return $key_elements;

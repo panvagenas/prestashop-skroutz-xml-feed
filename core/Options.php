@@ -12,11 +12,13 @@
 namespace XDaRk_v150216;
 
 
-if ( ! defined( '_PS_VERSION_' ) ) {
+if (!defined('_PS_VERSION_'))
+{
 	exit;
 }
 
-class Options extends Core {
+class Options extends Core
+{
 	/**
 	 * @var string
 	 */
@@ -42,7 +44,7 @@ class Options extends Core {
 	 * @var array
 	 */
 	protected $validators = array(
-		'hooks'              => array( 'array' ),
+		'hooks'              => array('array'),
 		/***********************************************
 		 * EDD Updates
 		 ***********************************************/
@@ -50,8 +52,8 @@ class Options extends Core {
 			'string:numeric >=' => 0,
 			'string:numeric <=' => 1
 		),
-		'edd.store_url'      => array( 'string' ),
-		'edd_license'        => array( 'string' ),
+		'edd.store_url'      => array('string'),
+		'edd_license'        => array('string'),
 		'edd.license.status' => array(
 			'string:numeric >=' => 0,
 			'string:numeric <=' => 1
@@ -60,8 +62,8 @@ class Options extends Core {
 			'string:numeric >=' => 0,
 			'string:numeric <=' => 1
 		),
-		'edd.demo_start'     => array( 'string:numeric >=' => 0 ),
-		'edd.demo_duration'  => array( 'string:numeric >=' => 0 ),
+		'edd.demo_start'     => array('string:numeric >=' => 0),
+		'edd.demo_duration'  => array('string:numeric >=' => 0),
 	);
 	/**
 	 * @var array
@@ -71,9 +73,10 @@ class Options extends Core {
 	/**
 	 * @param \Module $module
 	 */
-	public function __construct( $module ) {
-		parent::__construct( $module );
-		$this->optionsArrayName = Core::$instanceNamespace . '-Options';
+	public function __construct($module)
+	{
+		parent::__construct($module);
+		$this->optionsArrayName = Core::$instanceNamespace.'-Options';
 		$this->init();
 	}
 
@@ -83,16 +86,19 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	protected function init() {
-		$this->setUp( $this->defaults, $this->validators );
+	protected function init()
+	{
+		$this->setUp($this->defaults, $this->validators);
 
-		$this->stored = unserialize( \Configuration::get( $this->optionsArrayName ) );
+		$this->stored = unserialize(\Configuration::get($this->optionsArrayName));
 
-		if ( ! $this->stored || empty( $this->stored ) ) {
+		if (!$this->stored || empty($this->stored))
+		{
 			$this->stored = $this->defaults;
-			$this->saveOptions( $this->stored );
-		} else {
-			$this->stored = array_merge( $this->defaults, $this->stored );
+			$this->saveOptions($this->stored);
+		} else
+		{
+			$this->stored = array_merge($this->defaults, $this->stored);
 		}
 
 		return $this;
@@ -107,8 +113,9 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	protected function setUp( $defaults, $validators ) {
-		$this->_setUp( $defaults, $validators );
+	protected function setUp($defaults, $validators)
+	{
+		$this->_setUp($defaults, $validators);
 	}
 
 	/**
@@ -121,11 +128,13 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	protected function _setUp( $defaults, $validators ) {
-		if ( ! is_array( $defaults ) || ! is_array( $validators ) || count( $defaults ) !== count( $validators ) ) {
-			throw new \Exception( 'Options array size not match with validators array size' );
+	protected function _setUp($defaults, $validators)
+	{
+		if (!is_array($defaults) || !is_array($validators) || count($defaults) !== count($validators))
+		{
+			throw new \Exception('Options array size not match with validators array size');
 		}
-		$this->defaults   = $defaults;
+		$this->defaults = $defaults;
 		$this->validators = $validators;
 	}
 
@@ -139,15 +148,18 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function getValue( $optionName, $default = false ) {
-		if ( ! isset( $this->defaults[ $optionName ] ) ) {
-			throw new \Exception( 'No matching option' );
+	public function getValue($optionName, $default = false)
+	{
+		if (!isset($this->defaults[$optionName]))
+		{
+			throw new \Exception('No matching option');
 		}
-		if ( $default ) {
-			return $this->defaults[ $optionName ];
+		if ($default)
+		{
+			return $this->defaults[$optionName];
 		}
 
-		return isset( $this->stored[ $optionName ] ) ? $this->stored[ $optionName ] : $this->defaults[ $optionName ];
+		return isset($this->stored[$optionName]) ? $this->stored[$optionName] : $this->defaults[$optionName];
 	}
 
 	/**
@@ -158,10 +170,11 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function saveOptions( $newOptions ) {
-		$this->stored = array_merge( (array) $this->stored, $this->validateOptions( $newOptions ) );
+	public function saveOptions($newOptions)
+	{
+		$this->stored = array_merge((array)$this->stored, $this->validateOptions($newOptions));
 
-		return \Configuration::updateValue( $this->optionsArrayName, serialize( $this->stored ) );
+		return \Configuration::updateValue($this->optionsArrayName, serialize($this->stored));
 	}
 
 	/**
@@ -172,224 +185,258 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	protected function validateOptions( Array $newOptions ) {
-		foreach ( $newOptions as $_key => &$_value ) {
-			if ( ! isset( $this->defaults[ $_key ] ) ) {
-				unset( $newOptions[ $_key ] );
-			} else if ( gettype( $_value ) !== gettype( $this->defaults[ $_key ] ) ) {
-				$_value = $this->defaults[ $_key ];
-			} else if ( ! empty( $this->validators[ $_key ] ) ) {
-				foreach ( $this->validators[ $_key ] as $_validation_key => $_data ) {
+	protected function validateOptions(Array $newOptions)
+	{
+		foreach ($newOptions as $_key => &$_value)
+		{
+			if (!isset($this->defaults[$_key]))
+			{
+				unset($newOptions[$_key]);
+			} else if (gettype($_value) !== gettype($this->defaults[$_key]))
+			{
+				$_value = $this->defaults[$_key];
+			} else if (!empty($this->validators[$_key]))
+			{
+				foreach ($this->validators[$_key] as $_validation_key => $_data)
+				{
 					// Can be a combination of numeric/associative keys.
 
-					if ( is_numeric( $_validation_key ) ) // A numeric key?
+					if (is_numeric($_validation_key)) // A numeric key?
 					{
 						$_validation_type = $_data; // As type.
-						$_data            = null; // Nullify data.
+						$_data = null; // Nullify data.
 					} else // Associative key with possible `$_data`.
 					{
 						/** @var mixed $_data */
 						$_validation_type = $_validation_key;
 					}
-					switch ( $_validation_type ) // By validation type.
+					switch ($_validation_type) // By validation type.
 					{
 						case 'string': // Validation only.
 
-							if ( ! is_string( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:!empty': // Validation only.
 
-							if ( ! is_string( $_value ) || empty( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || empty($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:strlen': // Validation only.
-							if ( ! is_string( $_value ) || ! strlen( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || !strlen($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:strlen <=': // Validation only.
 
-							if ( ! is_string( $_value ) || ( is_numeric( $_data ) && strlen( $_value ) > $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || (is_numeric($_data) && strlen($_value) > $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:strlen >=': // Validation only.
 
-							if ( ! is_string( $_value ) || ( is_numeric( $_data ) && strlen( $_value ) < $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || (is_numeric($_data) && strlen($_value) < $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:numeric': // Validation only.
 
-							if ( ! is_string( $_value ) || ! is_numeric( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || !is_numeric($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:numeric <=': // Validation only.
 
-							if ( ! is_string( $_value ) || ! is_numeric( $_value ) || ( is_numeric( $_data ) && $_value > $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || !is_numeric($_value) || (is_numeric($_data) && $_value > $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:numeric >=': // Validation only.
 
-							if ( ! is_string( $_value ) || ! is_numeric( $_value ) || ( is_numeric( $_data ) && $_value < $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || !is_numeric($_value) || (is_numeric($_data) && $_value < $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:preg_match': // Validation only.
 
-							if ( ! is_string( $_value ) || ( is_string( $_data ) && ! preg_match( $_data, $_value ) ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || (is_string($_data) && !preg_match($_data, $_value)))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:in_array': // Validation only.
 
-							if ( ! is_string( $_value ) || ( is_array( $_data ) && ! in_array( $_value, $_data ) ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value) || (is_array($_data) && !in_array($_value, $_data)))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'string:strtolower': // Validation w/procedure.
 
-							if ( ! is_string( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							} else // Just force lowercase.
 							{
-								$_value = strtolower( $_value );
+								$_value = strtolower($_value);
 								break; // Do next validation.
 							}
 
 						case 'string:preg_replace': // Validation w/procedure.
 
-							if ( ! is_string( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_string($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
-							} else if ( is_array( $_data ) && isset( $_data['replace'] ) && isset( $_data['with'] ) ) {
-								$_value = preg_replace( $_data['replace'], $_data['with'], $_value );
+							} else if (is_array($_data) && isset($_data['replace']) && isset($_data['with']))
+							{
+								$_value = preg_replace($_data['replace'], $_data['with'], $_value);
 							}
 
 							break; // Do next validation.
 
 						case 'string:date': // Validation w/procedure.
-							$time = strtotime( $_value );
-							if ( ! is_string( $_value ) && ! is_numeric( $time ) ) {
-								$_value = $this->defaults[ $_key ];
+							$time = strtotime($_value);
+							if (!is_string($_value) && !is_numeric($time))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
-							} else {
-								$_value = date( 'Y-m-d', $time );
+							} else
+							{
+								$_value = date('Y-m-d', $time);
 							}
 
 							break; // Do next validation.
 
 						case 'array': // Validation only.
 
-							if ( ! is_array( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:!empty': // Validation only.
 
-							if ( ! is_array( $_value ) || empty( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value) || empty($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:count <=': // Validation only.
 
-							if ( ! is_array( $_value ) || ( is_numeric( $_data ) && count( $_value ) > $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value) || (is_numeric($_data) && count($_value) > $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:count >=': // Validation only.
 
-							if ( ! is_array( $_value ) || ( is_numeric( $_data ) && count( $_value ) < $_data ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value) || (is_numeric($_data) && count($_value) < $_data))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:containing': // Validation only.
 
-							if ( ! is_array( $_value ) || ! in_array( $_data, $_value, true ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value) || !in_array($_data, $_value, true))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:containing-any-of': // Validation only.
 
-							if ( ! is_array( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
-							} else if ( is_array( $_data ) ) {
-								foreach ( $_data as $_data_value ) {
-									if ( in_array( $_data_value, $_value, true ) ) {
+							} else if (is_array($_data))
+							{
+								foreach ($_data as $_data_value)
+								{
+									if (in_array($_data_value, $_value, true))
+									{
 										break;
 									}
 								} // Do next validation.
 
-								unset( $_data_value ); // Housekeeping.
-								$_value = $this->defaults[ $_key ];
+								unset($_data_value); // Housekeeping.
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
 							}
 							break; // Do next validation.
 
 						case 'array:containing-all-of': // Validation only.
 
-							if ( ! is_array( $_value ) ) {
-								$_value = $this->defaults[ $_key ];
+							if (!is_array($_value))
+							{
+								$_value = $this->defaults[$_key];
 								break 2; // Done validating here.
-							} else if ( is_array( $_data ) ) {
-								foreach ( $_data as $_data_value ) {
-									if ( ! in_array( $_data_value, $_value, true ) ) {
-										$_value = $this->defaults[ $_key ];
+							} else if (is_array($_data))
+							{
+								foreach ($_data as $_data_value)
+								{
+									if (!in_array($_data_value, $_value, true))
+									{
+										$_value = $this->defaults[$_key];
 										break 2; // Done validating here.
 									}
 								}
-								unset( $_data_value ); // Housekeeping.
+								unset($_data_value); // Housekeeping.
 							}
 							break; // Do next validation.
 						case 'bool': // Validation only.
-							$_value = (bool) $_value;
+							$_value = (bool)$_value;
 							break; // Do next validation.
 
 						default: // Exception.
-							throw new \Exception( sprintf( 'Unknown validation type: `%1$s`.', $_validation_type ) );
+							throw new \Exception(sprintf('Unknown validation type: `%1$s`.', $_validation_type));
 					}
 				}
-				unset( $_validation_key, $_validation_type, $_data );
+				unset($_validation_key, $_validation_type, $_data);
 			}
 		}
-		unset( $_key, $_value ); // A little housekeeping.
+		unset($_key, $_value); // A little housekeeping.
 
 		return $newOptions; // Returns all options (fully validated).
 	}
@@ -400,11 +447,14 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public function getAllBooleans() {
+	public function getAllBooleans()
+	{
 		$ret = array();
-		foreach ( $this->defaults as $k => $v ) {
-			if ( $this->validators[ $k ] == 'bool' ) {
-				$ret[ $k ] = $this->defaults[ $k ];
+		foreach ($this->defaults as $k => $v)
+		{
+			if ($this->validators[$k] == 'bool')
+			{
+				$ret[$k] = $this->defaults[$k];
 			}
 		}
 
@@ -419,11 +469,13 @@ class Options extends Core {
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since ${VERSION}
 	 */
-	public function getOptionsArray( $defaults = false ) {
+	public function getOptionsArray($defaults = false)
+	{
 		return $defaults ? $this->defaults : $this->stored;
 	}
 
-	public function deleteAllOptions() {
-		return \Configuration::deleteByName( $this->optionsArrayName );
+	public function deleteAllOptions()
+	{
+		return \Configuration::deleteByName($this->optionsArrayName);
 	}
 }

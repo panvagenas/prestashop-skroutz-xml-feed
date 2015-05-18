@@ -14,6 +14,7 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class Debug extends Core {
+class Debug extends Core
+{
 
 } 

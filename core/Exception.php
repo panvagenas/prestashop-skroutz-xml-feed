@@ -14,8 +14,10 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class Exception extends \Exception{
-	public final function factory(){
+class Exception extends \Exception
+{
+	public final function factory()
+	{
 		return new self(func_get_args());
 	}
 } 

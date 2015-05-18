@@ -12,7 +12,8 @@
 namespace XDaRk_v150216;
 
 
-class Integer extends Core{
+class Integer extends Core
+{
 	/**
 	 * Short version of `(!empty() && is_integer())`.
 	 *

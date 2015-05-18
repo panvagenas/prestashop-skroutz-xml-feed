@@ -12,17 +12,19 @@
 namespace XDaRk_v150216;
 
 
-class EDD extends Core{
+class EDD extends Core
+{
 	/**
 	 * @return bool
 	 * @throws \Exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function isEDD() {
-		$storeUrl = $this->Options->getValue( 'edd.store_url', true );
+	public function isEDD()
+	{
+		$storeUrl = $this->Options->getValue('edd.store_url', true);
 
-		return $this->Options->getValue( 'edd.update', true ) && $this->String->is_not_empty( $storeUrl );
+		return $this->Options->getValue('edd.update', true) && $this->String->is_not_empty($storeUrl);
 	}
 
 	/**
@@ -31,8 +33,9 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function hasDemo() {
-		return (bool) $this->Options->getValue( 'edd.demo', true );
+	public function hasDemo()
+	{
+		return (bool)$this->Options->getValue('edd.demo', true);
 	}
 
 	/**
@@ -40,7 +43,8 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function isDemoActive() {
+	public function isDemoActive()
+	{
 		return $this->getDemoEndTime() >= time();
 	}
 
@@ -50,9 +54,10 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function getDemoEndTime() {
-		$duration   = (int) $this->Options->getValue( 'edd.demo_duration', true );
-		$demo_start = (int) $this->Options->getValue( 'edd.demo_start' );
+	public function getDemoEndTime()
+	{
+		$duration = (int)$this->Options->getValue('edd.demo_duration', true);
+		$demo_start = (int)$this->Options->getValue('edd.demo_start');
 
 		return $duration + $demo_start;
 	}
@@ -62,8 +67,9 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function isDemoOver() {
-		return ! $this->isDemoActive();
+	public function isDemoOver()
+	{
+		return !$this->isDemoActive();
 	}
 
 	/**
@@ -73,16 +79,20 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function startDemo( $startTime = null ) {
-		if ( ! $this->hasDemo() ) {
+	public function startDemo($startTime = null)
+	{
+		if (!$this->hasDemo())
+		{
 			return;
 		}
-		if ( ! $startTime ) {
+		if (!$startTime)
+		{
 			$startTime = time();
 		}
-		$demo_start = (int) $this->Options->getValue( 'edd.demo_start' );
-		if ( $demo_start === 0 ) {
-			$this->Options->saveOptions( array( 'edd.demo_start' => $startTime ) );
+		$demo_start = (int)$this->Options->getValue('edd.demo_start');
+		if ($demo_start === 0)
+		{
+			$this->Options->saveOptions(array('edd.demo_start' => $startTime));
 		}
 	}
 
@@ -90,17 +100,20 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function endDemo() {
-		$this->Options->saveOptions( array( 'edd.demo_start' => 0 ) );
+	public function endDemo()
+	{
+		$this->Options->saveOptions(array('edd.demo_start' => 0));
 	}
+
 	/**
 	 * @return mixed
 	 * @throws \Exception
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function getLicense() {
-		return $this->Options->getValue( 'edd_license' );
+	public function getLicense()
+	{
+		return $this->Options->getValue('edd_license');
 	}
 
 	/**
@@ -111,12 +124,14 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function getLicenseStatus( $overrideIfInDemo = true ) {
-		if ( $overrideIfInDemo && $this->hasDemo() && $this->isDemoActive() ) {
+	public function getLicenseStatus($overrideIfInDemo = true)
+	{
+		if ($overrideIfInDemo && $this->hasDemo() && $this->isDemoActive())
+		{
 			return true;
 		}
 
-		return $this->Options->getValue( 'edd.license.status' );
+		return $this->Options->getValue('edd.license.status');
 	}
 
 	/**
@@ -125,18 +140,21 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function setLicense( $license ) {
-		$this->Options->saveOptions( array( 'edd_license' => $license ) );
+	public function setLicense($license)
+	{
+		$this->Options->saveOptions(array('edd_license' => $license));
 	}
+
 	/**
 	 * @param $status
 	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function setLicenseStatus( $status ) {
-		$status = (bool) $status ? 1 : 0;
-		$this->Options->saveOptions( array( 'edd.license.status' => $status ) );
+	public function setLicenseStatus($status)
+	{
+		$status = (bool)$status ? 1 : 0;
+		$this->Options->saveOptions(array('edd.license.status' => $status));
 	}
 
 	/**
@@ -144,16 +162,20 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function chkLicense(  ) {
+	public function chkLicense()
+	{
 		$license_data = $this->APIRequest();
 
-		if ( ! is_object( $license_data ) || ! isset( $license_data->license ) ) {
+		if (!is_object($license_data) || !isset($license_data->license))
+		{
 			return 2;
 		}
 
-		if ( $license_data->license == 'valid' ) {
+		if ($license_data->license == 'valid')
+		{
 			return 1;
-		} else {
+		} else
+		{
 			return 0;
 		}
 	}
@@ -166,30 +188,35 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function activateLicense( $license ) {
-		$this->check_arg_types( 'string', func_get_args() );
+	public function activateLicense($license)
+	{
+		$this->check_arg_types('string', func_get_args());
 
-		$license_data = $this->APIRequest( 'activate_license', $license );
-		if ( is_object( $license_data ) ) {
-			if ( $license_data->license === 'valid' ) {
-				$this->setLicense( $license );
-				$this->setLicenseStatus( 1 );
+		$license_data = $this->APIRequest('activate_license', $license);
+		if (is_object($license_data))
+		{
+			if ($license_data->license === 'valid')
+			{
+				$this->setLicense($license);
+				$this->setLicenseStatus(1);
 				// TODO The notice
 //				$this->©notice->enqueue( array(
 //					'notice'           => $this->__( 'License activated!' ),
 //					'allow_dismissals' => false
 //				) );
-			} elseif ( $license_data->success == false && $license_data->error == 'expired' ) {
-				$this->setLicense( $license );
-				$this->setLicenseStatus( 0 );
+			} elseif ($license_data->success == false && $license_data->error == 'expired')
+			{
+				$this->setLicense($license);
+				$this->setLicenseStatus(0);
 				// TODO The notice
 //				$this->©notice->error_enqueue( array(
 //					'notice'           => $this->__( 'Your license has expired' ),
 //					'allow_dismissals' => false
 //				) );
-			} else {
-				$this->setLicense( $license );
-				$this->setLicenseStatus( 0 );
+			} else
+			{
+				$this->setLicense($license);
+				$this->setLicenseStatus(0);
 				// TODO The notice
 //				$this->©notice->error_enqueue( array(
 //					'notice'           => $this->__( 'License couldn\'t be activated. Please check your input.' ),
@@ -198,13 +225,14 @@ class EDD extends Core{
 			}
 
 			return $license_data;
-		} else {
+		} else
+		{
 			// TODO The notice
 //			$this->©notice->error_enqueue( array(
 //				'notice'           => $this->__( 'There was an error contacting the license server. Please try again later.' ),
 //				'allow_dismissals' => false
 //			) );
-			$this->setLicenseStatus( 0 );
+			$this->setLicenseStatus(0);
 
 			return false;
 		}
@@ -217,11 +245,14 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function deactivateLicense( $license ) {
-		$license_data = $this->APIRequest( 'deactivate_license', $license );
-		if ( is_object( $license_data ) ) {
-			if ( $license_data->license == 'deactivated' ) {
-				$this->setLicenseStatus( 0 );
+	public function deactivateLicense($license)
+	{
+		$license_data = $this->APIRequest('deactivate_license', $license);
+		if (is_object($license_data))
+		{
+			if ($license_data->license == 'deactivated')
+			{
+				$this->setLicenseStatus(0);
 				// TODO The notice
 //				$this->©notice->enqueue( array(
 //					'notice'           => $this->__( 'License deactivated!' ),
@@ -245,14 +276,15 @@ class EDD extends Core{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150216
 	 */
-	public function APIRequest($action = 'check_license', $license = ''){
+	public function APIRequest($action = 'check_license', $license = '')
+	{
 		$stream_context = @stream_context_create(
 			array(
 				'http' => array(
 					'timeout' => 30,
-					'method' => 'GET',
+					'method'  => 'GET',
 				),
-				'ssl' => array(
+				'ssl'  => array(
 					'verify_peer' => false
 				)
 			)
@@ -265,7 +297,7 @@ class EDD extends Core{
 			'url'        => $this->Url->getBaseUrl(true, false)
 		);
 
-		$url = 'https://erp.xdark.eu?' . http_build_query($api_params);
+		$url = 'https://erp.xdark.eu?'.http_build_query($api_params);
 
 		$res = @file_get_contents($url, null, $stream_context);
 

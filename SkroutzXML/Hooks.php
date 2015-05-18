@@ -20,7 +20,8 @@ namespace SkroutzXML;
  * @property \SkroutzXML\Skroutz    Skroutz
  * @property \SkroutzXML\XML        XML
  */
-class Hooks extends \XDaRk_v150216\Hooks{
+class Hooks extends \XDaRk_v150216\Hooks
+{
 	/**
 	 * @param $p
 	 *
@@ -28,11 +29,10 @@ class Hooks extends \XDaRk_v150216\Hooks{
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since TODO ${VERSION}
 	 */
-	public function hookDisplayHeader( $p ) {
-		$queryVars = $this->Vars->getQueryVars();
-		if(isset($queryVars[$this->Options->getValue('request_var')])
-		   && $queryVars[$this->Options->getValue('request_var')] === $this->Options->getValue('request_var_value')){
-			$this->Skroutz->printXMLFile(isset($queryVars['force_new']));
-		}
+	public function hookDisplayHeader($p)
+	{
+		$query_vars = $this->Vars->getQueryVars();
+		if (isset($query_vars[$this->Options->getValue('request_var')]) && $query_vars[$this->Options->getValue('request_var')] === $this->Options->getValue('request_var_value'))
+			$this->Skroutz->printXMLFile(isset($query_vars['force_new']));
 	}
 }

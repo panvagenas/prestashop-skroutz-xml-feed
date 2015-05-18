@@ -14,7 +14,8 @@ namespace SkroutzXML\Panels;
 
 use XDaRk_v150216\Panels\Panel;
 
-class MapOptions extends Panel {
+class MapOptions extends Panel
+{
 	protected $tab = 0;
 	protected $type = 'main';
 	protected $title = 'Skroutz.gr Map Options';
@@ -25,8 +26,9 @@ class MapOptions extends Panel {
 		'class' => 'button pull-right'
 	);
 
-	public function __construct( $moduleInstance ) {
-		parent::__construct( $moduleInstance );
+	public function __construct($moduleInstance)
+	{
+		parent::__construct($moduleInstance);
 
 		$productIdOptions = array(
 			array(
@@ -43,7 +45,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product ID', 'map_id', $productIdOptions, true, $this->l('Select the product reference group you are using in your store') );
+		$this->addSelectField('Product ID', 'map_id', $productIdOptions, true, $this->l('Select the product reference group you are using in your store'));
 
 		$productManufacturerOptions = array(
 			array(
@@ -56,7 +58,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Manufacturer', 'map_manufacturer', $productManufacturerOptions, true, $this->l('Select the field you are using to specify the manufacturer') );
+		$this->addSelectField('Product Manufacturer', 'map_manufacturer', $productManufacturerOptions, true, $this->l('Select the field you are using to specify the manufacturer'));
 
 		$productLinkOptions = array(
 			array(
@@ -65,7 +67,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Link', 'map_link', $productLinkOptions, true, $this->l('URL that leads to product. For upcoming features') );
+		$this->addSelectField('Product Link', 'map_link', $productLinkOptions, true, $this->l('URL that leads to product. For upcoming features'));
 
 		$productImageLinkOptions = array(
 			array(
@@ -78,7 +80,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Image', 'map_image', $productImageLinkOptions, true, $this->l('Choose if you want to use cover image or some random image from product\'s gallery') );
+		$this->addSelectField('Product Image', 'map_image', $productImageLinkOptions, true, $this->l('Choose if you want to use cover image or some random image from product\'s gallery'));
 
 		$productCategoriesOptions = array(
 			array(
@@ -91,7 +93,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Categories', 'map_category', $productCategoriesOptions, true, $this->l('Choose product tags if and only if no categories are set and instead product tags are in use') );
+		$this->addSelectField('Product Categories', 'map_category', $productCategoriesOptions, true, $this->l('Choose product tags if and only if no categories are set and instead product tags are in use'));
 
 		$productPriceOptions = array(
 			array(
@@ -108,7 +110,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Prices', 'map_price_with_vat', $productPriceOptions, true, $this->l('s option specify the product price that will be used in XML. This should be left to "Retail price with tax"') );
+		$this->addSelectField('Product Prices', 'map_price_with_vat', $productPriceOptions, true, $this->l('s option specify the product price that will be used in XML. This should be left to "Retail price with tax"'));
 
 		$productMPNOptions = array(
 			array(
@@ -129,7 +131,7 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product Manufacturer Reference Code', 'map_mpn', $productMPNOptions, true, $this->l('This option should reflect product\' manufacturer SKU') );
+		$this->addSelectField('Product Manufacturer Reference Code', 'map_mpn', $productMPNOptions, true, $this->l('This option should reflect product\' manufacturer SKU'));
 
 		$productISBNOptions = array(
 			array(
@@ -150,21 +152,24 @@ class MapOptions extends Panel {
 			),
 		);
 
-		$this->addSelectField( 'Product ISBN', 'map_isbn', $productISBNOptions, true, $this->l('This field will be used if you sell books in your store, to specify the ISBN of the book') );
+		$this->addSelectField('Product ISBN', 'map_isbn', $productISBNOptions, true, $this->l('This field will be used if you sell books in your store, to specify the ISBN of the book'));
 
 		// Multiselect from attribute groups
-		$default_lang        = (int) \Configuration::get( 'PS_LANG_DEFAULT' );
+		$default_lang = (int)\Configuration::get('PS_LANG_DEFAULT');
 		$productSizesOptions = array();
 		$productColorOptions = array();
-		$attributes          = \AttributeGroup::getAttributesGroups( $default_lang );
+		$attributes = \AttributeGroup::getAttributesGroups($default_lang);
 
-		foreach ( $attributes as $attribute ) {
-			if ( $attribute['is_color_group'] ) {
+		foreach ($attributes as $attribute)
+		{
+			if ($attribute['is_color_group'])
+			{
 				$productColorOptions[] = array(
 					'value' => $attribute['id_attribute_group'],
 					'name'  => $attribute['name'],
 				);
-			} else {
+			} else
+			{
 				$productSizesOptions[] = array(
 					'value' => $attribute['id_attribute_group'],
 					'name'  => $attribute['name'],
@@ -172,7 +177,7 @@ class MapOptions extends Panel {
 			}
 		}
 
-		$this->addMultiSelectField( 'Size Attributes', 'map_size', $productSizesOptions, true, $this->l('Choose the attributes that you use to specify product sizes. This field is used only if Fashion Store option is enabled') )
-		     ->addMultiSelectField( 'Color Attributes', 'map_color', $productColorOptions, true, $this->l('Choose the attributes that you use to specify product colors. This field is used only if Fashion Store option is enabled') );
+		$this->addMultiSelectField('Size Attributes', 'map_size', $productSizesOptions, true, $this->l('Choose the attributes that you use to specify product sizes. This field is used only if Fashion Store option is enabled'))
+			->addMultiSelectField('Color Attributes', 'map_color', $productColorOptions, true, $this->l('Choose the attributes that you use to specify product colors. This field is used only if Fashion Store option is enabled'));
 	}
 }

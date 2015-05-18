@@ -12,6 +12,9 @@
 namespace XDaRk_v150216;
 
 
-class Log {
-	public function log(){}
+class Log
+{
+	public function log()
+	{
+	}
 }

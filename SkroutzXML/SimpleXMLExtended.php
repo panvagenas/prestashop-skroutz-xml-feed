@@ -14,16 +14,18 @@ namespace SkroutzXML;
 /**
  * Class SimpleXMLExtended extends SimpleXMLElement so CDATA con be added without encoding
  */
-class SimpleXMLExtended extends \SimpleXMLElement {
+class SimpleXMLExtended extends \SimpleXMLElement
+{
 	/**
 	 * @param $cdata_text
 	 *
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 150213
 	 */
-	public function addCData($cdata_text) {
+	public function addCData($cdata_text)
+	{
 		$node = dom_import_simplexml($this);
-		$no   = $node->ownerDocument;
+		$no = $node->ownerDocument;
 		$node->appendChild($no->createCDATASection($cdata_text));
 	}
 }

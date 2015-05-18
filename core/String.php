@@ -14,11 +14,12 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class String extends Core{
+class String extends Core
+{
 	/**
 	 * Escapes JS line breaks (removes "\r"); and escapes single quotes.
 	 *
-	 * @param string  $string A string value.
+	 * @param string $string A string value.
 	 * @param integer $times Number of escapes. Defaults to `1`.
 	 *
 	 * @return string Escaped string, ready for JavaScript.
@@ -73,7 +74,7 @@ class String extends Core{
 	 *    1. Special handling for line breaks: `\r\n` and `\r` are converted to `\n`.
 	 *    2. This does NOT escape double quotes; only single quotes.
 	 *
-	 * @param mixed   $value Any value can be converted into an escaped string.
+	 * @param mixed $value Any value can be converted into an escaped string.
 	 *    Actually, objects can't, but this recurses into objects.
 	 *
 	 * @param integer $times Number of escapes. Defaults to `1`.
@@ -84,15 +85,15 @@ class String extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function esc_js_sq_deep($value, $times = 1, $___recursion = FALSE)
+	public function esc_js_sq_deep($value, $times = 1, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('', 'integer', 'boolean', func_get_args());
 
-		if(is_array($value) || is_object($value))
+		if (is_array($value) || is_object($value))
 		{
-			foreach($value as &$_value)
-				$_value = $this->esc_js_sq_deep($_value, $times, TRUE);
+			foreach ($value as &$_value)
+				$_value = $this->esc_js_sq_deep($_value, $times, true);
 			return $value;
 		}
 		$value = str_replace(array("\r\n", "\r", '"'), array("\n", "\n", '%%!dq!%%'), (string)$value);
@@ -119,7 +120,7 @@ class String extends Core{
 	/**
 	 * Escapes regex backreference chars (i.e. `\\$` and `\\\\`).
 	 *
-	 * @param string  $string A string value.
+	 * @param string $string A string value.
 	 * @param integer $times Number of escapes. Defaults to `1`.
 	 *
 	 * @return string Escaped string.
@@ -141,7 +142,7 @@ class String extends Core{
 	 *    However, private/protected properties *will* be included, if the current scope allows access to these private/protected properties.
 	 *    Static properties are NEVER considered by this routine, because static properties are NOT iterated by `foreach()`.
 	 *
-	 * @param mixed   $value Any value can be converted into an escaped string.
+	 * @param mixed $value Any value can be converted into an escaped string.
 	 *    Actually, objects can't, but this recurses into objects.
 	 *
 	 * @param integer $times Number of escapes. Defaults to `1`.
@@ -152,15 +153,15 @@ class String extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function esc_refs_deep($value, $times = 1, $___recursion = FALSE)
+	public function esc_refs_deep($value, $times = 1, $___recursion = false)
 	{
-		if(!$___recursion) // Only for the initial caller.
+		if (!$___recursion) // Only for the initial caller.
 			$this->check_arg_types('', 'integer', 'boolean', func_get_args());
 
-		if(is_array($value) || is_object($value))
+		if (is_array($value) || is_object($value))
 		{
-			foreach($value as &$_value)
-				$_value = $this->esc_refs_deep($_value, $times, TRUE);
+			foreach ($value as &$_value)
+				$_value = $this->esc_refs_deep($_value, $times, true);
 			return $value;
 		}
 		return str_replace(array('\\', '$'), array(str_repeat('\\', abs($times)).'\\', str_repeat('\\', abs($times)).'$'), (string)$value);
@@ -182,7 +183,7 @@ class String extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function random($length = 12, $special_chars = TRUE, $extra_special_chars = FALSE)
+	public function random($length = 12, $special_chars = true, $extra_special_chars = false)
 	{
 		$this->check_arg_types('integer', 'boolean', 'boolean', func_get_args());
 
@@ -190,7 +191,7 @@ class String extends Core{
 		$chars .= ($special_chars) ? '!@#$%^&*()' : '';
 		$chars .= ($extra_special_chars) ? '-_ []{}<>~`+=,.;:/?|' : '';
 
-		for($i = 0, $random_str = ''; $i < abs($length); $i++)
+		for ($i = 0, $random_str = ''; $i < abs($length); $i++)
 			$random_str .= (string)substr($chars, mt_rand(0, strlen($chars) - 1), 1);
 
 		return $random_str;
@@ -235,12 +236,12 @@ class String extends Core{
 	 *
 	 * @return boolean TRUE if all arguments are strings, and they're NOT empty.
 	 */
-	public function are_not_empty(&$a, &$b = NULL, &$c = NULL, &$d = NULL, &$e = NULL, &$f = NULL, &$g = NULL, &$h = NULL, &$i = NULL, &$j = NULL, &$k = NULL, &$l = NULL, &$m = NULL, &$n = NULL, &$o = NULL, &$p = NULL, &$q = NULL, &$r = NULL, &$s = NULL, &$t = NULL, &$u = NULL, &$v = NULL, &$w = NULL, &$x = NULL, &$y = NULL, &$z = NULL)
+	public function are_not_empty(&$a, &$b = null, &$c = null, &$d = null, &$e = null, &$f = null, &$g = null, &$h = null, &$i = null, &$j = null, &$k = null, &$l = null, &$m = null, &$n = null, &$o = null, &$p = null, &$q = null, &$r = null, &$s = null, &$t = null, &$u = null, &$v = null, &$w = null, &$x = null, &$y = null, &$z = null)
 	{
-		foreach(func_get_args() as $_arg)
-			if(empty($_arg) || !is_string($_arg))
-				return FALSE;
+		foreach (func_get_args() as $_arg)
+			if (empty($_arg) || !is_string($_arg))
+				return false;
 
-		return TRUE;
+		return true;
 	}
 } 

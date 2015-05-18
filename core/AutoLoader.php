@@ -14,7 +14,8 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if(!class_exists('\XDaRk_v150216\AutoLoader')) {
+if (!class_exists('\XDaRk_v150216\AutoLoader'))
+{
 	/**
 	 * A general-purpose implementation that includes the optional functionality
 	 * of allowing multiple base directories for a single namespace prefix.
@@ -99,15 +100,18 @@ if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 			$baseDir = rtrim(rtrim($baseDir, '/'), DIRECTORY_SEPARATOR).'/';
 
 			// initialize the namespace prefix array
-			if (isset($this->prefixes[ $prefix ]) === false) {
-				$this->prefixes[ $prefix ] = array();
+			if (isset($this->prefixes[$prefix]) === false)
+			{
+				$this->prefixes[$prefix] = array();
 			}
 
 			// retain the base directory for the namespace prefix
-			if ($prepend) {
-				array_unshift($this->prefixes[ $prefix ], $baseDir);
-			} else {
-				array_push($this->prefixes[ $prefix ], $baseDir);
+			if ($prepend)
+			{
+				array_unshift($this->prefixes[$prefix], $baseDir);
+			} else
+			{
+				array_push($this->prefixes[$prefix], $baseDir);
 			}
 		}
 
@@ -126,7 +130,8 @@ if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 
 			// work backwards through the namespace names of the fully-qualified
 			// class name to find a mapped file name
-			while (false !== $pos = strrpos($prefix, '\\')) {
+			while (false !== $pos = strrpos($prefix, '\\'))
+			{
 
 				// retain the trailing namespace separator in the prefix
 				$prefix = substr($class, 0, $pos + 1);
@@ -135,7 +140,8 @@ if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 				$relativeClass = substr($class, $pos + 1);
 				// try to load a mapped file for the prefix and relative class
 				$mappedFile = $this->loadMappedFile($prefix, $relativeClass);
-				if ($mappedFile) {
+				if ($mappedFile)
+				{
 					return $mappedFile;
 				}
 
@@ -160,22 +166,25 @@ if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 		protected function loadMappedFile($prefix, $relativeClass)
 		{
 			// are there any base directories for this namespace prefix?
-			if (isset($this->prefixes[ $prefix ]) === false) {
+			if (isset($this->prefixes[$prefix]) === false)
+			{
 				return false;
 			}
 
 			// look through base directories for this namespace prefix
-			foreach ($this->prefixes[ $prefix ] as $baseDir) {
+			foreach ($this->prefixes[$prefix] as $baseDir)
+			{
 
 				// replace the namespace prefix with the base directory,
 				// replace namespace separators with directory separators
 				// in the relative class name, append with .php
 				$file = $baseDir
-				        .str_replace('\\', '/', $relativeClass)
-				        .'.php';
+					.str_replace('\\', '/', $relativeClass)
+					.'.php';
 
 				// if the mapped file exists, require it
-				if ($this->requireFile($file)) {
+				if ($this->requireFile($file))
+				{
 					// yes, we're done
 					return $file;
 				}
@@ -194,7 +203,8 @@ if(!class_exists('\XDaRk_v150216\AutoLoader')) {
 		 */
 		protected function requireFile($file)
 		{
-			if (is_file($file)) {
+			if (is_file($file))
+			{
 				require $file;
 
 				return true;

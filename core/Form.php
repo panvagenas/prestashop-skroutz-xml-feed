@@ -43,7 +43,8 @@ class Form extends \HelperFormCore
 	public function setFieldsValues(Array $fieldValues)
 	{
 		/* @var Panel $panel */
-		foreach ((array)$this->panels as $panel) {
+		foreach ((array)$this->panels as $panel)
+		{
 			$this->fields_value = array_merge($this->fields_value, $panel->parseFieldsValues($fieldValues));
 		}
 
@@ -57,7 +58,8 @@ class Form extends \HelperFormCore
 	 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 	 * @since 141110
 	 */
-	public function registerPanel(Panel $panel){
+	public function registerPanel(Panel $panel)
+	{
 		array_push($this->panels, $panel);
 		return $this;
 	}
@@ -73,26 +75,32 @@ class Form extends \HelperFormCore
 	 */
 	public function generateForm($fields_value = array())
 	{
-		if(empty($this->fields_value) && !empty($fields_value)){
+		if (empty($this->fields_value) && !empty($fields_value))
+		{
 			$this->setFieldsValues($fields_value);
-		} elseif(!empty($this->panels)) {
+		} elseif (!empty($this->panels))
+		{
 			return '';
 		}
 
-		if ( !empty($this->panels) && $this->initialized)
+		if (!empty($this->panels) && $this->initialized)
 		{
 			$main = '';
 			$sidebar = '';
 			/* @var $panel Panel */
-			foreach ($this->panels as $k => $panel) {
-				if($panel->isInSidebar()){
+			foreach ($this->panels as $k => $panel)
+			{
+				if ($panel->isInSidebar())
+				{
 					$sidebar .= parent::generateForm(array($panel->__toArray()));
-				} else {
+				} else
+				{
 					$main .= parent::generateForm(array($panel->__toArray()));
 				}
 			}
 
-			if(empty($sidebar)){
+			if (empty($sidebar))
+			{
 				return $main;
 			}
 			return '<div class="row"><div class="col-lg-9">'.$main.'</div><div class="col-lg-3">'.$sidebar.'</div></div>';
@@ -130,31 +138,31 @@ class Form extends \HelperFormCore
 	 */
 	public function initialize($module, $bootstrap = true, $title = false, $showToolbar = true, $toolBarScroll = true, $toolbarBtn = array())
 	{
-		$this->default_lang = (int) \Configuration::get('PS_LANG_DEFAULT');
+		$this->default_lang = (int)\Configuration::get('PS_LANG_DEFAULT');
 
-		$this->module          = $module;
+		$this->module = $module;
 		$this->name_controller = $module->name;
-		$this->token           = \Tools::getAdminTokenLite('AdminModules');
-		$this->currentIndex    = \AdminController::$currentIndex.'&configure='.$module->name;
-		$this->bootstrap       = $bootstrap;
+		$this->token = \Tools::getAdminTokenLite('AdminModules');
+		$this->currentIndex = \AdminController::$currentIndex.'&configure='.$module->name;
+		$this->bootstrap = $bootstrap;
 //		$this->name_controller = 'col-lg-3';
 
 		// Language
-		$this->default_form_language    = $this->default_lang;
+		$this->default_form_language = $this->default_lang;
 		$this->allow_employee_form_lang = $this->default_lang;
 
 		// Title and toolbar
-		$this->title          = $title === false ? $module->displayName : $title;
-		$this->show_toolbar   = $showToolbar;        // false -> remove toolbar
+		$this->title = $title === false ? $module->displayName : $title;
+		$this->show_toolbar = $showToolbar;        // false -> remove toolbar
 		$this->toolbar_scroll = $toolBarScroll;      // yes - > Toolbar is always visible on the top of the screen.
-		$this->submit_action  = 'submit'.$module->name;
-		$this->toolbar_btn    =
+		$this->submit_action = 'submit'.$module->name;
+		$this->toolbar_btn =
 			(empty($toolbarBtn) || !is_array($toolbarBtn))
 				? array(
 				'save' => array(
 					'desc' => $module->l('Save'),
 					'href' => \AdminController::$currentIndex.'&configure='.$module->name.'&save'.$module->name.
-					          '&token='.\Tools::getAdminTokenLite('AdminModules'),
+						'&token='.\Tools::getAdminTokenLite('AdminModules'),
 				),
 				'back' => array(
 					'href' => \AdminController::$currentIndex.'&token='.\Tools::getAdminTokenLite('AdminModules'),

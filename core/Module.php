@@ -14,7 +14,8 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if (!class_exists('XDaRk_v150216\Module')) {
+if (!class_exists('XDaRk_v150216\Module'))
+{
 
 	/**
 	 * Class Module
@@ -92,14 +93,17 @@ if (!class_exists('XDaRk_v150216\Module')) {
 		public function __call($name, $args)
 		{
 			// hook functions to Hook class
-			if (Hooks::isHookFunction($name)) {
+			if (Hooks::isHookFunction($name))
+			{
 				$name = 'hook'.ucfirst(ltrim($name, 'hook'));
-				if (!method_exists($this->core->moduleInstance->Hooks, $name)) {
+				if (!method_exists($this->core->moduleInstance->Hooks, $name))
+				{
 					throw new \Exception('Hook '.$name.' Not Found');
 				}
 
 				return $this->core->moduleInstance->Hooks->{$name}($args);
-			} else {
+			} else
+			{
 				return $this->core->{$name}($args);
 			}
 		}
@@ -107,7 +111,8 @@ if (!class_exists('XDaRk_v150216\Module')) {
 		public function __isset($name)
 		{
 			// hook functions to Hook class
-			if (Hooks::isHookFunction($name)) {
+			if (Hooks::isHookFunction($name))
+			{
 				return true;
 			}
 
@@ -131,16 +136,16 @@ if (!class_exists('XDaRk_v150216\Module')) {
 			// Register core namespace
 			$this->loader->addNamespace('\XDaRk_v150216', dirname(__FILE__));
 
-			$this->core              = Core::getInstance($this);
-			Core::$instanceNamespace = $GLOBALS[ $this->name ]['root_ns'];
-			Core::$instanceBaseDir   = $GLOBALS[ $this->name ]['dir'];
-			Core::$instanceRootNSDir = $GLOBALS[ $this->name ]['dir'].DIRECTORY_SEPARATOR.Core::$instanceNamespace;
+			$this->core = Core::getInstance($this);
+			Core::$instanceNamespace = $GLOBALS[$this->name]['root_ns'];
+			Core::$instanceBaseDir = $GLOBALS[$this->name]['dir'];
+			Core::$instanceRootNSDir = $GLOBALS[$this->name]['dir'].DIRECTORY_SEPARATOR.Core::$instanceNamespace;
 
 			// Register instance namespace, this is a necessary step
 			$this->loader->addNamespace('\\'.Core::$instanceNamespace, Core::$instanceRootNSDir);
 
 			Core::$instanceClasses = File::phpClassesInDir(Core::$instanceRootNSDir);
-			Core::$classes         = File::phpClassesInDir(dirname(__FILE__));
+			Core::$classes = File::phpClassesInDir(dirname(__FILE__));
 
 			// Extenders
 			$this->xdRegisterNameSpaces();
@@ -155,8 +160,8 @@ if (!class_exists('XDaRk_v150216\Module')) {
 		{
 			parent::__construct();
 
-			$this->displayName      = $this->l($this->displayName);
-			$this->description      = $this->l($this->description);
+			$this->displayName = $this->l($this->displayName);
+			$this->description = $this->l($this->description);
 			$this->confirmUninstall = $this->l('Are you sure you want to uninstall?');
 			$this->_initialize();
 		}
@@ -181,11 +186,14 @@ if (!class_exists('XDaRk_v150216\Module')) {
 
 			$output = '';
 
-			if (\Tools::isSubmit('submit'.$this->name)) {
+			if (\Tools::isSubmit('submit'.$this->name))
+			{
 				$newOptions = $_POST;
-				if ($this->Options->saveOptions($newOptions)) {
+				if ($this->Options->saveOptions($newOptions))
+				{
 					$output .= $this->displayConfirmation($this->l('Settings updated'));
-				} else {
+				} else
+				{
 					$output .= $this->displayError($this->l('There was an error saving options'));
 				}
 			}
@@ -239,7 +247,8 @@ if (!class_exists('XDaRk_v150216\Module')) {
 		 * @author Panagiotis Vagenas <pan.vagenas@gmail.com>
 		 * @since ${VERSION}
 		 */
-		public function getContext(){
+		public function getContext()
+		{
 			return $this->context;
 		}
 	}

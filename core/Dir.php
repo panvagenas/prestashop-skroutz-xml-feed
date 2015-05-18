@@ -14,7 +14,8 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class Dir extends Core {
+class Dir extends Core
+{
 
 	/**
 	 * Normalizes directory/file separators.

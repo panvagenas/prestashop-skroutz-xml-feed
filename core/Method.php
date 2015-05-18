@@ -17,7 +17,8 @@ if (!defined('_PS_VERSION_'))
 /**
  * @property null reconsider
  */
-class Method extends Core{
+class Method extends Core
+{
 	/**
 	 * PHP's language constructs.
 	 *
@@ -66,14 +67,14 @@ class Method extends Core{
 
 		$function = ltrim(strtolower($function), '\\'); // Clean this up before checking.
 
-		if(isset($this->static[__FUNCTION__][$function]) && $reconsider !== $this::reconsider)
+		if (isset($this->static[__FUNCTION__][$function]) && $reconsider !== $this::reconsider)
 			return $this->static[__FUNCTION__]; // Use the cache.
 
-		$this->static[__FUNCTION__][$function] = FALSE;
+		$this->static[__FUNCTION__][$function] = false;
 
-		if((in_array($function, $this->constructs, TRUE) || is_callable($function) || function_exists($function))
-		   && !in_array($function, $this->disabled(), TRUE) // And it is NOT disabled in some way.
-		) $this->static[__FUNCTION__][(string)$function] = TRUE;
+		if ((in_array($function, $this->constructs, true) || is_callable($function) || function_exists($function))
+			&& !in_array($function, $this->disabled(), true) // And it is NOT disabled in some way.
+		) $this->static[__FUNCTION__][(string)$function] = true;
 
 		return $this->static[__FUNCTION__][$function];
 	}
@@ -87,22 +88,22 @@ class Method extends Core{
 	 */
 	public function disabled()
 	{
-		if(isset($this->static[__FUNCTION__]))
+		if (isset($this->static[__FUNCTION__]))
 			return $this->static[__FUNCTION__];
 
 		$this->static[__FUNCTION__] = array();
 
-		if(!function_exists('ini_get')) return $this->static[__FUNCTION__];
+		if (!function_exists('ini_get')) return $this->static[__FUNCTION__];
 
-		if(($_ini_val = trim(strtolower(ini_get('disable_functions')))))
-			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], preg_split('/[\s;,]+/', $_ini_val, NULL, PREG_SPLIT_NO_EMPTY));
+		if (($_ini_val = trim(strtolower(ini_get('disable_functions')))))
+			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], preg_split('/[\s;,]+/', $_ini_val, null, PREG_SPLIT_NO_EMPTY));
 		unset($_ini_val); // Housekeeping.
 
-		if(($_ini_val = trim(strtolower(ini_get('suhosin.executor.func.blacklist')))))
-			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], preg_split('/[\s;,]+/', $_ini_val, NULL, PREG_SPLIT_NO_EMPTY));
+		if (($_ini_val = trim(strtolower(ini_get('suhosin.executor.func.blacklist')))))
+			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], preg_split('/[\s;,]+/', $_ini_val, null, PREG_SPLIT_NO_EMPTY));
 		unset($_ini_val); // Housekeeping.
 
-		if($this->String->is_true(ini_get('suhosin.executor.disable_eval')))
+		if ($this->String->is_true(ini_get('suhosin.executor.disable_eval')))
 			$this->static[__FUNCTION__] = array_merge($this->static[__FUNCTION__], array('eval'));
 
 		return $this->static[__FUNCTION__];
@@ -111,7 +112,7 @@ class Method extends Core{
 	/**
 	 * Array of all backtrace callers (or a specific backtrace caller).
 	 *
-	 * @param array               $debug_backtrace Array from `debug_backtrace()`.
+	 * @param array $debug_backtrace Array from `debug_backtrace()`.
 	 *
 	 * @param null|string|integer $position Default is NULL (all callers).
 	 *
@@ -126,7 +127,7 @@ class Method extends Core{
 	 *
 	 * @throws exception If invalid types are passed through arguments list.
 	 */
-	public function get_backtrace_callers($debug_backtrace, $position = NULL)
+	public function get_backtrace_callers($debug_backtrace, $position = null)
 	{
 		$this->check_arg_types('array', array('null', 'string', 'integer'), func_get_args());
 
@@ -138,23 +139,23 @@ class Method extends Core{
 			'call_user_func', 'call_user_func_array',
 			'check_arg_types', 'check_extension_arg_types'
 		);
-		foreach($debug_backtrace as $_caller) // Compile callers.
+		foreach ($debug_backtrace as $_caller) // Compile callers.
 		{
-			if(!is_array($_caller)) continue;
-			if(!$this->String->is_not_empty($_caller['function'])) continue;
-			if(in_array(strtolower($_caller['function']), $exclusions)) continue;
+			if (!is_array($_caller)) continue;
+			if (!$this->String->is_not_empty($_caller['function'])) continue;
+			if (in_array(strtolower($_caller['function']), $exclusions)) continue;
 
-			if($this->String->are_not_empty($_caller['class'], $_caller['type']))
+			if ($this->String->are_not_empty($_caller['class'], $_caller['type']))
 				$callers[] = $_caller['class'].$_caller['type'].$_caller['function'];
 			else $callers[] = $_caller['function'];
 		}
 		unset($_caller); // A little housekeeping.
 
-		if(!isset($position)) return array_map('strtolower', $callers);
-		if($position === 'last') return (!empty($callers[0])) ? strtolower($callers[0]) : 'unknown-caller';
-		if($position === 'previous') return (!empty($callers[1])) ? strtolower($callers[1]) : 'unknown-caller';
-		if($position === 'before-previous') return (!empty($callers[2])) ? strtolower($callers[2]) : 'unknown-caller';
-		if(is_integer($position)) return (!empty($callers[$position])) ? strtolower($callers[$position]) : 'unknown-caller';
+		if (!isset($position)) return array_map('strtolower', $callers);
+		if ($position === 'last') return (!empty($callers[0])) ? strtolower($callers[0]) : 'unknown-caller';
+		if ($position === 'previous') return (!empty($callers[1])) ? strtolower($callers[1]) : 'unknown-caller';
+		if ($position === 'before-previous') return (!empty($callers[2])) ? strtolower($callers[2]) : 'unknown-caller';
+		if (is_integer($position)) return (!empty($callers[$position])) ? strtolower($callers[$position]) : 'unknown-caller';
 
 		return array_map('strtolower', $callers); // Defaults to all callers.
 	}

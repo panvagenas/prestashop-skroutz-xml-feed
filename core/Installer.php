@@ -14,26 +14,31 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-class Installer extends Core {
-	public function install() {
+class Installer extends Core
+{
+	public function install()
+	{
 		$result = true;
 		$result &= $this->xdInstall();
 
 		return $result;
 	}
 
-	public function xdInstall() {
+	public function xdInstall()
+	{
 		return true;
 	}
 
-	public function uninstall() {
+	public function uninstall()
+	{
 		$result = true;
 		$result &= $this->xdUninstall();
 		$result &= $this->Options->deleteAllOptions();
 		return $result;
 	}
 
-	public function xdUninstall() {
+	public function xdUninstall()
+	{
 		return true;
 	}
 } 

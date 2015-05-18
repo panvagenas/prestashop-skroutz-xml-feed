@@ -14,8 +14,10 @@ namespace XDaRk_v150216;
 if (!defined('_PS_VERSION_'))
 	exit;
 
-if(!class_exists('\XDaRk_v150216\CarrierModule')){
-	abstract class CarrierModule extends Module {
+if (!class_exists('\XDaRk_v150216\CarrierModule'))
+{
+	abstract class CarrierModule extends Module
+	{
 		public $id_carrier;
 
 		abstract public function getOrderShippingCost($params, $shipping_cost);
